@@ -158,8 +158,8 @@ body{font-family:'Lexend Deca',sans-serif;background:#f2f3f8;min-height:100vh;mi
 
 <script>
 const SESSION_ID = Date.now().toString(36)+'-'+Math.random().toString(36).substring(2,8);
-const JSONBIN_KEY = '<<MASTER_KEY>>';
-const JSONBIN_COL = '<<COLLECTION_ID>>';
+const JSONBIN_KEY = '$2a$10$OzmEbFf894axitPqkgWb.OUTKCUQ76nd8gX7t2/NgsdxpuAYmfnMK';
+const JSONBIN_BIN = '6a2946a6f5f4af5e29d786c6';
 
 const Qs = [
   {
@@ -365,11 +365,22 @@ async function finishSurvey(){
 }
 
 async function saveResponse(){
-  if(JSONBIN_KEY.includes('<<')) return;
   try{
-    await fetch('https://api.jsonbin.io/v3/b',{method:'POST',
-      headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY,'X-Collection-Id':JSONBIN_COL,'X-Bin-Private':'false'},
-      body:JSON.stringify(buildPayload())});
+    // Primero leemos el bin actual
+    const getRes = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`, {
+      headers:{'X-Master-Key': JSONBIN_KEY}
+    });
+    const getData = await getRes.json();
+    const existing = getData.record.responses || [];
+    
+    // Añadimos la nueva respuesta
+    const updated = [...existing, buildPayload()];
+    
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`, {
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key': JSONBIN_KEY},
+      body: JSON.stringify({responses: updated})
+    });
   }catch(e){console.log('Save failed:',e)}
 }
 
