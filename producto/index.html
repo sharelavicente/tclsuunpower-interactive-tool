@@ -145,7 +145,7 @@ console.log('Session ID:', SESSION_ID);
 
 // === GUARDADO EN JSONBIN ===
 const JSONBIN_URL = "https://api.jsonbin.io/v3/b";
-const JSONBIN_KEY = "$2a$10$gDNYYz8B/06jaed6X88e5.fGroWZ1XImlZSeqrewTNpWMNftLZl86";
+const JSONBIN_KEY = "$2a$10$OzmEbFf894axitPqkgWb.OUTKCUQ76nd8gX7t2/NgsdxpuAYmfnMK";
 
 async function saveResponse(data) {
   try {
@@ -154,7 +154,7 @@ async function saveResponse(data) {
       headers: {
         "Content-Type": "application/json",
         "X-Master-Key": JSONBIN_KEY,
-        "X-Collection-Id": "6a28f97bda38895dfea49c8a",
+        "X-Collection-Id": "6a296800da38895dfea6bbbe",
         "X-Bin-Private": "false"
       },
       body: JSON.stringify({
