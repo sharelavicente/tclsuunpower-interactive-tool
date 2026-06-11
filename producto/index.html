@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SunPower | Roundtable Canal 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Lexend Deca',sans-serif;background:#f2f3f8;min-height:100vh;min-height:-webkit-fill-available;display:flex;flex-direction:column;align-items:center}
+#app{width:100%;max-width:520px;min-height:100vh;display:flex;flex-direction:column;background:#fff}
+
+.hdr{background:#71257F;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{color:#FFDF00;font-weight:700;font-size:18px;letter-spacing:2px}
+.step-badge{background:#FFDF00;color:#71257F;font-weight:700;font-size:12px;padding:4px 12px;border-radius:20px;letter-spacing:.5px}
+
+.prog-wrap{background:#f0e6f4;height:4px}
+.prog-fill{height:4px;background:#FFDF00;transition:width .4s ease;width:0%}
+
+.body{flex:1;padding:24px 20px 90px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+.event-label{font-size:11px;font-weight:700;color:#71257F;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.event-title{font-size:26px;font-weight:700;color:#71257F;line-height:1.2;letter-spacing:-.5px;margin-bottom:20px}
+.intro-hero{background:#71257F;border-radius:14px;padding:24px 20px;margin-bottom:20px}
+.intro-hero h2{color:#FFDF00;font-size:17px;font-weight:700;margin-bottom:8px}
+.intro-hero p{color:rgba(255,255,255,.8);font-size:13px;font-weight:300;line-height:1.7}
+.info-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.info-box{background:#fdf7ff;border:1.5px solid #e8d5f0;border-radius:10px;padding:14px 8px;text-align:center}
+.info-box .val{font-size:20px;font-weight:700;color:#71257F}
+.info-box .lbl{font-size:11px;color:#888;margin-top:2px;font-weight:300}
+.hint-box{background:#f7f7f7;border-left:3px solid #FFDF00;border-radius:6px;padding:12px 14px;font-size:13px;color:#555;font-weight:300;line-height:1.6;margin-bottom:24px}
+.hint-box strong{color:#71257F}
+
+.sec-tag{display:inline-block;background:#71257F;color:#fff;font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.q-num{font-size:12px;color:#999;font-weight:300;margin-bottom:6px}
+.q-text{font-size:17px;font-weight:700;color:#71257F;line-height:1.4;margin-bottom:8px;letter-spacing:-.3px}
+.q-sub{font-size:15px;font-weight:400;color:#444;margin-bottom:18px;line-height:1.5}
+
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1.5px solid #e0e0e0;border-radius:10px;cursor:pointer;transition:all .15s;min-height:52px;touch-action:manipulation}
+.opt:hover{border-color:#71257F;background:#fdf7ff}
+.opt.sel{border-color:#71257F;background:#fdf7ff}
+.opt-check{width:22px;height:22px;border-radius:50%;border:2px solid #ddd;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s}
+.opt.sel .opt-check{background:#71257F;border-color:#71257F;color:#FFDF00}
+.opt-lbl{font-size:14px;font-weight:300;color:#333;flex:1;line-height:1.4}
+
+.rank-hint{font-size:15px;font-weight:400;color:#444;margin-bottom:12px;line-height:1.5}
+.rank-list{display:flex;flex-direction:column;gap:8px}
+.rank-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fdf7ff;border:1.5px solid #e0e0e0;border-radius:10px;cursor:grab;user-select:none;touch-action:none;min-height:52px}
+.rank-item.dragging{opacity:.4;border-color:#71257F}
+.rank-item.drag-over{border-color:#71257F;background:#f5eafa}
+.rank-pos{width:26px;height:26px;border-radius:50%;background:#71257F;color:#FFDF00;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rank-pos.p1{background:#FFDF00;color:#71257F}
+.rank-txt{font-size:13px;font-weight:300;flex:1;color:#333;line-height:1.4}
+.rank-arrows{display:flex;flex-direction:column;gap:3px}
+.rank-arr{background:#fff;border:1.5px solid #e0e0e0;border-radius:5px;width:28px;height:24px;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;color:#999;transition:all .1s;touch-action:manipulation}
+.rank-arr:hover{background:#71257F;border-color:#71257F;color:#FFDF00}
+
+.open-wrap textarea{width:100%;min-height:110px;border:1.5px solid #e0e0e0;border-radius:10px;padding:14px;font-size:16px;font-family:'Lexend Deca',sans-serif;font-weight:300;resize:vertical;outline:none;color:#333;transition:border .15s}
+.open-wrap textarea:focus{border-color:#71257F}
+.char-count{text-align:right;font-size:11px;color:#bbb;margin-top:6px;font-weight:300}
+
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;background:#fff;border-top:1px solid #eee;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:99}
+.btn-primary{background:#FFDF00;color:#292929;font-family:'Lexend Deca',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:15px 24px;border-radius:11px;border:none;cursor:pointer;touch-action:manipulation;transition:background .15s}
+.btn-primary:hover{background:#71257F;color:#FFDF00}
+.btn-back{background:transparent;color:#999;font-family:'Lexend Deca',sans-serif;font-size:13px;font-weight:300;border:1.5px solid #e0e0e0;padding:13px 18px;border-radius:11px;cursor:pointer;touch-action:manipulation;transition:all .15s}
+.btn-back:hover{border-color:#71257F;color:#71257F}
+.btn-skip{background:none;border:1.5px solid #ccc;color:#666;font-size:13px;font-weight:400;font-family:'Lexend Deca',sans-serif;cursor:pointer;padding:13px 18px;border-radius:11px;letter-spacing:.5px;transition:all .15s}
+.btn-skip:hover{border-color:#71257F;color:#71257F}
+
+.ty-card{background:#71257F;border-radius:14px;padding:32px 24px;text-align:center;margin-bottom:20px}
+.ty-card h2{color:#FFDF00;font-size:22px;font-weight:700;margin-bottom:8px}
+.ty-card p{color:rgba(255,255,255,.8);font-size:13px;font-weight:300;line-height:1.7}
+.export-card{background:#fdf7ff;border:1.5px solid #e8d5f0;border-radius:12px;padding:18px;margin-bottom:16px}
+.export-title{font-size:11px;font-weight:700;color:#71257F;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.export-btns{display:flex;flex-direction:column;gap:8px}
+.export-btn{background:#fff;border:1.5px solid #71257F;color:#71257F;font-family:'Lexend Deca',sans-serif;font-size:13px;font-weight:700;padding:13px;border-radius:9px;cursor:pointer;touch-action:manipulation;letter-spacing:.5px;transition:all .15s}
+.export-btn:hover{background:#71257F;color:#FFDF00}
+.jsonbin-note{background:#f7f7f7;border-left:3px solid #FFDF00;border-radius:6px;padding:10px 12px;font-size:12px;color:#555;font-weight:300;line-height:1.6;margin-top:12px}
+
+.screen{display:none}
+.screen.active{display:block}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="hdr">
+    <div class="logo">SUNPOWER</div>
+    <div class="step-badge" id="stepBadge">Partner Day</div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
+
+  <div class="body">
+
+    <!-- INTRO -->
+    <div class="screen active" id="s-intro">
+      <div class="event-label">PARTNER DAY BARCELONA · JULIO 2026</div>
+      <div class="event-title">Roundtable<br>Canal 2026</div>
+      <div class="intro-hero">
+        <h2>Tu voz mejora el canal</h2>
+        <p>Comparte tu experiencia real sobre Financiación y el Programa del Partner SunPower. No hay respuestas correctas — solo insights que nos ayudan a mejorar juntos.</p>
+      </div>
+      <div class="info-row">
+        <div class="info-box"><div class="val">14</div><div class="lbl">Preguntas</div></div>
+        <div class="info-box"><div class="val">6–8'</div><div class="lbl">Minutos</div></div>
+        <div class="info-box"><div class="val">🔒</div><div class="lbl">Anónimo</div></div>
+      </div>
+      <div class="hint-box">📌 Respuestas anónimas, solo para mejora interna. <strong>Empresa y nombre son opcionales.</strong></div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+        <div>
+          <label style="font-size:12px;font-weight:700;color:#141F90;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Empresa <span style="color:#DC2D81;font-weight:700">*</span></label>
+          <input id="inpEmpresa" type="text" placeholder="Tu empresa" style="width:100%;border:1.5px solid #e0e0e0;border-radius:9px;padding:14px;font-size:16px;font-family:'Lexend Deca',sans-serif;font-weight:300;outline:none;color:#333" onfocus="this.style.borderColor='#141F90'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:700;color:#141F90;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Nombre <span style="color:#bbb;font-weight:300">(opcional)</span></label>
+          <input id="inpNombre" type="text" placeholder="Tu nombre" style="width:100%;border:1.5px solid #e0e0e0;border-radius:9px;padding:14px;font-size:16px;font-family:'Lexend Deca',sans-serif;font-weight:300;outline:none;color:#333" onfocus="this.style.borderColor='#141F90'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+      </div>
+      <button class="btn-primary" style="width:100%;font-size:15px;padding:17px" onclick="startSurvey()">COMENZAR →</button>
+    </div>
+
+    <!-- QUESTION -->
+    <div class="screen" id="s-q">
+      <div class="sec-tag" id="qTag"></div>
+      <div class="q-num" id="qNum"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="q-sub" id="qSub"></div>
+      <div id="qBody"></div>
+    </div>
+
+    <!-- THANKS -->
+    <div class="screen" id="s-ty">
+      <div class="ty-card">
+        <div style="font-size:44px;margin-bottom:12px">🎉</div>
+        <h2>¡Gracias por tu feedback!</h2>
+        <p>SunPower usará estos insights para mejorar la Financiación y el Programa Partner. Tu voz importa.</p>
+      </div>
+      <button class="btn-primary" style="width:100%;font-size:14px;padding:16px" onclick="resetSurvey()">ENVIAR OTRA RESPUESTA</button>
+    </div>
+
+  </div>
+
+  <div class="nav" id="navBar" style="display:none">
+    <button class="btn-back" id="btnBack" onclick="prevQ()">← Anterior</button>
+    <button class="btn-skip" onclick="skipQ()">Omitir</button>
+    <button class="btn-primary" id="btnNext" onclick="nextQ()">SIGUIENTE →</button>
+  </div>
+</div>
+
+<script>
+const SESSION_ID = Date.now().toString(36)+'-'+Math.random().toString(36).substring(2,8);
+const JSONBIN_KEY = '$2a$10$OzmEbFf894axitPqkgWb.OUTKCUQ76nd8gX7t2/NgsdxpuAYmfnMK';
+const JSONBIN_BIN = '6a2946a6f5f4af5e29d786c6';
+
+const Qs = [
+  {
+    id:'c1', tag:'CANAL · FINANCIACIÓN', type:'single',
+    text:'¿Te interesaría que SunPower llegara a un acuerdo con una entidad financiera para ofrecer condiciones preferentes a clientes residenciales?',
+    opts:['Muy alto — sería un diferenciador clave','Alto — lo usaría con frecuencia','Medio — depende de las condiciones','Bajo — no lo veo necesario']
+  },
+  {
+    id:'c2', tag:'CANAL · FINANCIACIÓN', type:'single',
+    text:'¿Cuál es el porcentaje de sistemas residenciales que financia actualmente?',
+    opts:['>30% de mis ventas','Entre 10–30% de mis ventas','Menos del 10% de mis ventas','Ninguno — no ofrezco financiación']
+  },
+  {
+    id:'c3', tag:'CANAL · FINANCIACIÓN', type:'ranking',
+    text:'¿Cuáles son los factores clave para cerrar una financiación con éxito?',
+    sub:'Ordena de más a menos importante',
+    items:['Tipo de interés competitivo','Rapidez del proceso de aprobación','Simplicidad en la aprobación','Cantidad máxima financiable']
+  },
+  {
+    id:'c4', tag:'CANAL · PROGRAMA PARTNER', type:'single',
+    text:'¿Cuál es tu nivel de conocimiento sobre el Programa Partner SunPower (beneficios y targets)?',
+    opts:['Muy alto — lo conozco en detalle','Alto — conozco los puntos principales','Medio — tengo conocimiento parcial','Bajo — apenas lo conozco']
+  },
+  {
+    id:'c5', tag:'CANAL · PROGRAMA PARTNER', type:'ranking',
+    text:'¿Qué elementos son más relevantes para cerrar ventas con clientes?',
+    sub:'Ordena de más a menos impacto en tu proceso de venta',
+    items:['Precio','Producto / tecnología','Soporte post-venta','Leads / generación de demanda','Marketing y materiales','Marca SunPower','Financiación para el cliente']
+  },
+  {
+    id:'c6', tag:'CANAL · PROGRAMA PARTNER', type:'single',
+    text:'Respecto a la competencia, ¿cómo valoras el servicio y los beneficios de trabajar directamente con SunPower como Partner seleccionado?',
+    opts:['Mucho mejor que la competencia','Mejor que la competencia','Similar a la competencia','Por debajo de la competencia']
+  },
+  {
+    id:'c7', tag:'CANAL · GARANTÍAS', type:'single',
+    text:'¿Cuál es tu nivel de conocimiento sobre el proceso de registro de garantías SunPower?',
+    opts:['Muy alto — lo gestiono sin problemas','Alto — lo conozco bien','Medio — tengo algunas dudas','Bajo — necesito formación']
+  },
+  {
+    id:'c8', tag:'CANAL · GARANTÍAS', type:'multi', max:3,
+    text:'¿Cuáles son las razones más importantes para que el cliente final registre su garantía?',
+    sub:'Selecciona hasta 3 opciones',
+    opts:['Para obtener 30/40 años (sin registro son 25 años)','Confirma que el cliente ha entendido los beneficios','Permite a SunPower contactar al cliente directamente','Activa servicios de mantenimiento y monitorización','Es requisito para acceder al soporte técnico']
+  },
+  {
+    id:'c9', tag:'CANAL · PROGRAMA PARTNER', type:'open',
+    text:'Los Partners tienen diferenciación de precios según nivel (Authorized, Premier, Elite). ¿Cómo valoras esta diferenciación?',
+    placeholder:'Tu opinión sobre la diferenciación por nivel...'
+  },
+  {
+    id:'c10', tag:'CANAL · PROGRAMA PARTNER', type:'open',
+    text:'¿Cuánto debería ser la diferencia de precio entre un nivel y otro (%)?',
+    placeholder:'Ej: 2%, 5%, depende del volumen...'
+  },
+  {
+    id:'c11', tag:'CANAL · PROGRAMA PARTNER', type:'open',
+    text:'¿Qué elementos sugieres que podrían ser diferenciadores entre un nivel y otro?',
+    placeholder:'Formación exclusiva, leads prioritarios, soporte dedicado...'
+  },
+  {
+    id:'c12', tag:'CANAL · FORMACIÓN', type:'ranking',
+    text:'¿En qué áreas de formación tienes mayor necesidad?',
+    sub:'Ordena de más a menos urgente',
+    items:['Módulos fotovoltaicos (producto y tecnología)','Sistemas de Almacenamiento','Estrategia de venta y argumentario']
+  },
+  {
+    id:'c13', tag:'CANAL · FORMACIÓN', type:'open',
+    text:'¿Qué otros servicios de formación te serían útiles?',
+    placeholder:'Webinars, certificaciones, visitas técnicas...'
+  },
+  {
+    id:'c14', tag:'CANAL · CALIDAD', type:'single',
+    text:'SunPower realizaba encuestas a clientes finales para analizar la calidad del servicio de la red de Partners. ¿Cómo valorarías que volviéramos a hacerlo?',
+    opts:['Muy útil — me ayudaría a mejorar','Útil — tiene sentido hacerlo','Indiferente','No es útil — prefiero no hacerlo']
+  }
+];
+
+let cur=0;
+const ans={};
+const rankState={};
+let dragSrc=null;
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+
+function updateProgress(){
+  document.getElementById('progFill').style.width=(cur/Qs.length*100)+'%';
+  document.getElementById('stepBadge').textContent=cur+' / '+Qs.length;
+}
+
+function startSurvey(){
+  const empresa = document.getElementById('inpEmpresa').value.trim();
+  const errEl = document.getElementById('empresa-error');
+  if(!empresa){ 
+    if(errEl) errEl.style.display='block'; 
+    return; 
+  }
+  if(errEl) errEl.style.display='none';
+  document.getElementById('navBar').style.display='flex';
+  show('s-q'); renderQ(0);
+}
+
+function renderQ(i){
+  cur=i;
+  const q=Qs[i];
+  document.getElementById('qTag').textContent=q.tag;
+  document.getElementById('qNum').textContent='Pregunta '+(i+1)+' de '+Qs.length;
+  document.getElementById('qText').textContent=q.text;
+  document.getElementById('qSub').textContent=q.sub||'';
+  document.getElementById('btnBack').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('btnNext').textContent=i===Qs.length-1?'ENVIAR ✓':'SIGUIENTE →';
+  updateProgress();
+  const body=document.getElementById('qBody');
+  body.innerHTML='';
+  if(q.type==='single') renderSingle(body,q);
+  else if(q.type==='multi') renderMulti(body,q);
+  else if(q.type==='ranking') renderRanking(body,q);
+  else if(q.type==='open') renderOpen(body,q);
+}
+
+function renderSingle(body,q){
+  const wrap=document.createElement('div');wrap.className='opts';
+  q.opts.forEach(o=>{
+    const item=document.createElement('div');
+    item.className='opt'+(ans[q.id]===o?' sel':'');
+    item.innerHTML=`<div class="opt-check">${ans[q.id]===o?'✓':''}</div><div class="opt-lbl">${o}</div>`;
+    item.onclick=()=>{ans[q.id]=o;renderQ(cur);};
+    wrap.appendChild(item);
+  });
+  body.appendChild(wrap);
+}
+
+function renderMulti(body,q){
+  const wrap=document.createElement('div');wrap.className='opts';
+  const sel=ans[q.id]||[];
+  q.opts.forEach(o=>{
+    const item=document.createElement('div');
+    item.className='opt'+(sel.includes(o)?' sel':'');
+    item.innerHTML=`<div class="opt-check" style="border-radius:5px">${sel.includes(o)?'✓':''}</div><div class="opt-lbl">${o}</div>`;
+    item.onclick=()=>{
+      let c=ans[q.id]||[];
+      c=c.includes(o)?c.filter(x=>x!==o):(c.length<q.max?[...c,o]:c);
+      ans[q.id]=c;renderQ(cur);
+    };
+    wrap.appendChild(item);
+  });
+  body.appendChild(wrap);
+}
+
+function renderRanking(body,q){
+  if(!rankState[q.id]) rankState[q.id]=[...q.items];
+  const hint=document.createElement('div');hint.className='rank-hint';hint.textContent='↕ Arrastra o usa las flechas para ordenar';body.appendChild(hint);
+  const list=document.createElement('div');list.className='rank-list';
+  rankState[q.id].forEach((item,i)=>{
+    const row=document.createElement('div');
+    row.className='rank-item';row.draggable=true;
+    row.innerHTML=`<div class="rank-pos ${i===0?'p1':''}">${i+1}</div><div class="rank-txt">${item}</div><div class="rank-arrows"><button class="rank-arr" data-i="${i}" data-d="-1">▲</button><button class="rank-arr" data-i="${i}" data-d="1">▼</button></div>`;
+    row.querySelectorAll('.rank-arr').forEach(btn=>{
+      btn.onclick=e=>{
+        e.stopPropagation();
+        const a=+btn.dataset.i,d=+btn.dataset.d,b=a+d;
+        if(b<0||b>=rankState[q.id].length) return;
+        [rankState[q.id][a],rankState[q.id][b]]=[rankState[q.id][b],rankState[q.id][a]];
+        ans[q.id]=[...rankState[q.id]];renderQ(cur);
+      };
+    });
+    row.addEventListener('dragstart',()=>{dragSrc=i;row.classList.add('dragging')});
+    row.addEventListener('dragend',()=>row.classList.remove('dragging'));
+    row.addEventListener('dragover',e=>{e.preventDefault();row.classList.add('drag-over')});
+    row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
+    row.addEventListener('drop',e=>{
+      e.preventDefault();row.classList.remove('drag-over');
+      if(dragSrc===null||dragSrc===i) return;
+      const arr=rankState[q.id];const[m]=arr.splice(dragSrc,1);arr.splice(i,0,m);
+      ans[q.id]=[...arr];renderQ(cur);
+    });
+    let ty=0;
+    row.addEventListener('touchstart',e=>{ty=e.touches[0].clientY;dragSrc=i},{passive:true});
+    row.addEventListener('touchend',e=>{
+      const dy=e.changedTouches[0].clientY-ty;
+      if(Math.abs(dy)>30){const d=dy>0?1:-1,j=i+d;
+        if(j>=0&&j<rankState[q.id].length){[rankState[q.id][i],rankState[q.id][j]]=[rankState[q.id][j],rankState[q.id][i]];ans[q.id]=[...rankState[q.id]];renderQ(cur);}
+      }
+    },{passive:true});
+    list.appendChild(row);
+  });
+  ans[q.id]=ans[q.id]||[...rankState[q.id]];
+  body.appendChild(list);
+}
+
+function renderOpen(body,q){
+  const wrap=document.createElement('div');wrap.className='open-wrap';
+  const ta=document.createElement('textarea');
+  ta.placeholder=q.placeholder||'Escribe aquí...';ta.value=ans[q.id]||'';
+  const cc=document.createElement('div');cc.className='char-count';cc.textContent=ta.value.length+' caracteres';
+  ta.oninput=()=>{ans[q.id]=ta.value;cc.textContent=ta.value.length+' caracteres'};
+  wrap.appendChild(ta);wrap.appendChild(cc);body.appendChild(wrap);
+}
+
+function nextQ(){cur<Qs.length-1?renderQ(cur+1):finishSurvey()}
+function prevQ(){if(cur>0) renderQ(cur-1)}
+function skipQ(){nextQ()}
+
+async function finishSurvey(){
+  document.getElementById('progFill').style.width='100%';
+  document.getElementById('stepBadge').textContent=Qs.length+' / '+Qs.length;
+  document.getElementById('navBar').style.display='none';
+  show('s-ty');
+  await saveResponse();
+}
+
+async function saveResponse(){
+  try{
+    // Primero leemos el bin actual
+    const getRes = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`, {
+      headers:{'X-Master-Key': JSONBIN_KEY}
+    });
+    const getData = await getRes.json();
+    const existing = getData.record.responses || [];
+    
+    // Añadimos la nueva respuesta
+    const updated = [...existing, buildPayload()];
+    
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`, {
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key': JSONBIN_KEY},
+      body: JSON.stringify({responses: updated})
+    });
+  }catch(e){console.log('Save failed:',e)}
+}
+
+function buildPayload(){
+  return{session_id:SESSION_ID,timestamp:new Date().toISOString(),
+    survey:'SunPower Roundtable Canal 2026 — Partner Day Barcelona',
+    empresa:document.getElementById('inpEmpresa').value||null,
+    nombre:document.getElementById('inpNombre').value||null,
+    responses:Qs.map(q=>({id:q.id,tag:q.tag,question:q.text,type:q.type,answer:ans[q.id]??null}))};
+}
+
+function exportJSON(){dl(new Blob([JSON.stringify(buildPayload(),null,2)],{type:'application/json'}),'sp_canal_'+SESSION_ID+'.json')}
+function exportCSV(){
+  const p=buildPayload();
+  let csv='session_id,timestamp,empresa,nombre,id,tag,pregunta,tipo,respuesta\n';
+  p.responses.forEach(r=>{
+    const a=Array.isArray(r.answer)?r.answer.join(' | '):(r.answer??'');
+    csv+=`"${p.session_id}","${p.timestamp}","${p.empresa||''}","${p.nombre||''}","${r.id}","${r.tag}","${r.question.replace(/"/g,'""')}","${r.type}","${String(a).replace(/"/g,'""')}"\n`;
+  });
+  dl(new Blob([csv],{type:'text/csv'}),'sp_canal_'+SESSION_ID+'.csv');
+}
+function copyClip(){navigator.clipboard.writeText(JSON.stringify(buildPayload(),null,2)).then(()=>alert('✅ Respuestas copiadas'))}
+function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click()}
+function resetSurvey(){
+  Object.keys(ans).forEach(k=>delete ans[k]);
+  Object.keys(rankState).forEach(k=>delete rankState[k]);
+  document.getElementById('inpEmpresa').value='';
+  document.getElementById('inpNombre').value='';
+  document.getElementById('navBar').style.display='none';
+  document.getElementById('progFill').style.width='0%';
+  document.getElementById('stepBadge').textContent='Partner Day';
+  show('s-intro');
+}
+</script>
+</body>
+</html>
