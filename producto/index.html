@@ -143,29 +143,41 @@ function genSessionId() {
 const SESSION_ID = genSessionId();
 console.log('Session ID:', SESSION_ID);
 
+
 // === GUARDADO EN JSONBIN ===
 const JSONBIN_URL = "https://api.jsonbin.io/v3/b";
 const JSONBIN_KEY = "$2a$10$OzmEbFf894axitPqkgWb.OUTKCUQ76nd8gX7t2/NgsdxpuAYmfnMK";
+const JSONBIN_BIN = "6a296800da38895dfea6bbbe";
 
 async function saveResponse(data) {
   try {
-    await fetch(JSONBIN_URL, {
-      method: "POST",
+    // 1. Leer el bin actual
+    const getRes = await fetch(`${JSONBIN_URL}/${JSONBIN_BIN}/latest`, {
+      headers: { "X-Master-Key": JSONBIN_KEY }
+    });
+    const getData = await getRes.json();
+    const existing = getData.record.responses || [];
+
+    // 2. Añadir la nueva respuesta
+    const newEntry = {
+      session_id: SESSION_ID,
+      timestamp: new Date().toISOString(),
+      event: "Partner Day Barcelona 2026",
+      ...data
+    };
+    const updated = [...existing, newEntry];
+
+    // 3. Guardar el bin actualizado
+    await fetch(`${JSONBIN_URL}/${JSONBIN_BIN}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "X-Master-Key": JSONBIN_KEY,
-        "X-Collection-Id": "6a2945b0da38895dfea5f96e",
-        "X-Bin-Private": "false"
+        "X-Master-Key": JSONBIN_KEY
       },
-      body: JSON.stringify({
-        session_id: SESSION_ID,
-        timestamp: new Date().toISOString(),
-        event: "Partner Day Barcelona 2026",
-        ...data
-      })
+      body: JSON.stringify({ responses: updated })
     });
   } catch(e) {
-    console.log("Save failed (non-critical):", e);
+    console.log("Save failed:", e);
   }
 }
 
