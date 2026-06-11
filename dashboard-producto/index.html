@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SunPower | Resultados Configurador Producto 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Lexend Deca',sans-serif;background:#f2f3f8;color:#222}
+
+header{background:#71257F;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{color:#FFDF00;font-weight:700;font-size:20px;letter-spacing:2px}
+.header-right{display:flex;align-items:center;gap:12px}
+.badge{background:#FFDF00;color:#71257F;font-weight:700;font-size:11px;padding:4px 14px;border-radius:20px;letter-spacing:.5px}
+.btn-refresh{background:transparent;border:1.5px solid #FFDF00;color:#FFDF00;font-family:'Lexend Deca',sans-serif;font-size:12px;font-weight:700;padding:8px 16px;border-radius:8px;cursor:pointer;letter-spacing:.5px;transition:all .15s}
+.btn-refresh:hover{background:#FFDF00;color:#71257F}
+
+.container{max-width:1100px;margin:0 auto;padding:32px 24px}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.kpi{background:#fff;border-radius:12px;padding:20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.kpi .val{font-size:36px;font-weight:700;color:#71257F}
+.kpi .lbl{font-size:12px;color:#888;font-weight:300;margin-top:4px}
+
+.section{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.section-title{font-size:13px;font-weight:700;color:#71257F;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+.section-q{font-size:16px;font-weight:700;color:#222;margin-bottom:20px;line-height:1.4}
+.tag{display:inline-block;background:#71257F;color:#fff;font-size:10px;font-weight:700;padding:2px 10px;border-radius:10px;letter-spacing:1px;margin-bottom:8px}
+.tag-seg{display:inline-block;font-size:10px;font-weight:700;padding:2px 10px;border-radius:10px;letter-spacing:1px;margin-right:6px}
+.tag-res{background:#71257F;color:#fff}
+.tag-ind{background:#DC2D81;color:#fff}
+
+.bar-wrap{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:flex;align-items:center;gap:12px}
+.bar-label{font-size:13px;font-weight:300;color:#333;min-width:240px;flex-shrink:0;line-height:1.4}
+.bar-track{flex:1;height:28px;background:#f2f3f8;border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;background:#71257F;border-radius:6px;transition:width .6s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:10px}
+.bar-fill.yellow{background:#FFDF00}
+.bar-pct{font-size:12px;font-weight:700;color:#fff}
+.bar-pct.dark{color:#71257F}
+.bar-count{font-size:12px;color:#aaa;font-weight:300;min-width:40px;text-align:right}
+
+.rank-list{display:flex;flex-direction:column;gap:8px}
+.rank-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#f7f4ff;border-radius:10px;border-left:4px solid #71257F}
+.rank-row.r1{border-color:#FFDF00;background:#fffbe6}
+.rank-pos{width:28px;height:28px;border-radius:50%;background:#71257F;color:#FFDF00;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rank-pos.p1{background:#FFDF00;color:#71257F}
+.rank-txt{font-size:14px;font-weight:300;flex:1}
+.rank-score{font-size:12px;font-weight:700;color:#71257F;background:#e8d5f0;padding:3px 10px;border-radius:10px}
+
+.seg-tabs{display:flex;gap:8px;margin-bottom:16px}
+.seg-tab{padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #e0e0e0;background:#fff;font-family:'Lexend Deca',sans-serif;transition:all .15s}
+.seg-tab.active-res{background:#71257F;color:#FFDF00;border-color:#71257F}
+.seg-tab.active-ind{background:#DC2D81;color:#fff;border-color:#DC2D81}
+
+.export-bar{background:#fff;border-radius:12px;padding:20px 24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.export-bar p{font-size:13px;color:#666;font-weight:300}
+.export-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-export{background:#71257F;color:#fff;font-family:'Lexend Deca',sans-serif;font-size:12px;font-weight:700;padding:10px 20px;border-radius:8px;border:none;cursor:pointer;letter-spacing:.5px;transition:all .15s}
+.btn-export:hover{background:#FFDF00;color:#71257F}
+.btn-export.outline{background:#fff;color:#71257F;border:1.5px solid #71257F}
+.btn-export.outline:hover{background:#71257F;color:#FFDF00}
+
+.loading{text-align:center;padding:80px 24px}
+.loading .spinner{width:48px;height:48px;border:4px solid #e8d5f0;border-top-color:#71257F;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading p{color:#888;font-size:14px;font-weight:300}
+.empty{text-align:center;padding:40px;color:#aaa;font-size:14px;font-weight:300}
+
+@media(max-width:768px){
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .bar-label{min-width:140px;font-size:12px}
+  header{padding:14px 16px}
+  .container{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">SUNPOWER</div>
+  <div class="header-right">
+    <div class="badge">Configurador Producto 2026</div>
+    <button class="btn-refresh" onclick="loadData()">↻ Actualizar</button>
+  </div>
+</header>
+
+<div class="container">
+  <div id="root"><div class="loading"><div class="spinner"></div><p>Cargando configuraciones...</p></div></div>
+</div>
+
+<script>
+const JSONBIN_KEY = '$2a$10$OzmEbFf894axitPqkgWb.OUTKCUQ76nd8gX7t2/NgsdxpuAYmfnMK';
+const JSONBIN_BIN = '6a296800da38895dfea6bbbe';
+
+let allData = [];
+let currentSeg = 'all';
+
+const QUESTIONS = {
+  size: 'Formato de panel',
+  backsheet: 'Backsheet',
+  frame: 'Marco',
+  bifacial: 'Bifacialidad',
+  warranty_product: 'Garantía de producto',
+  warranty_service: 'Garantía de servicio',
+  fire: 'Clasificación contra incendios'
+};
+
+const RANK_RES = ['Precio','Eficiencia / Producción','Estética','Garantía','Seguridad'];
+const RANK_IND = ['Precio (€/W)','Eficiencia / LCOE','Garantía y bankability','Seguridad (RSCIEI)','Servicio pre/postventa'];
+
+async function loadData(){
+  document.getElementById('root').innerHTML='<div class="loading"><div class="spinner"></div><p>Cargando configuraciones...</p></div>';
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`,{
+      headers:{'X-Master-Key':JSONBIN_KEY}
+    });
+    const data = await res.json();
+    // Soporta tanto array directo como objeto con responses
+    const raw = data.record;
+    if(Array.isArray(raw)) allData = raw;
+    else if(Array.isArray(raw.responses)) allData = raw.responses;
+    else allData = [raw].filter(Boolean);
+    render();
+  }catch(e){
+    document.getElementById('root').innerHTML='<div class="empty">⚠️ Error al cargar los datos.</div>';
+  }
+}
+
+function filtered(){
+  if(currentSeg==='all') return allData;
+  return allData.filter(r=>r.segment===currentSeg);
+}
+
+function countSel(qid, seg){
+  const data = seg ? allData.filter(r=>r.segment===seg) : allData;
+  const counts = {};
+  data.forEach(r=>{
+    const v = r.selections?.[qid];
+    if(v) counts[v]=(counts[v]||0)+1;
+  });
+  return counts;
+}
+
+function avgRanking(items, seg){
+  const data = seg ? allData.filter(r=>r.segment===seg) : filtered();
+  const scores = {};
+  items.forEach(it=>scores[it]=0);
+  data.forEach(r=>{
+    if(!Array.isArray(r.ranking)) return;
+    r.ranking.forEach(rank=>{
+      const title = rank.title;
+      if(scores[title]!==undefined){
+        scores[title] += (items.length - rank.position + 1);
+      }
+    });
+  });
+  return Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+}
+
+function render(){
+  const n = allData.length;
+  const nRes = allData.filter(r=>r.segment==='residencial').length;
+  const nInd = allData.filter(r=>r.segment==='industrial').length;
+  const nEmp = allData.filter(r=>r.company).length;
+  const last = n>0 ? new Date(allData[allData.length-1].timestamp).toLocaleString('es-ES') : '—';
+  const avgPrice = n>0 ? (allData.reduce((s,r)=>s+parseFloat(r.price_eur_w||0.135),0)/n).toFixed(3).replace('.',',') : '—';
+
+  let html = '';
+
+  // KPIs
+  html+=`<div class="kpi-row">
+    <div class="kpi"><div class="val">${n}</div><div class="lbl">Configuraciones totales</div></div>
+    <div class="kpi"><div class="val">${nRes}</div><div class="lbl">Residencial</div></div>
+    <div class="kpi"><div class="val">${nInd}</div><div class="lbl">Industrial / C&I</div></div>
+    <div class="kpi"><div class="val" style="font-size:${last.length>15?'16px':'36px'}">${last}</div><div class="lbl">Última configuración</div></div>
+  </div>`;
+
+  if(n===0){
+    html+='<div class="empty">Aún no hay configuraciones. Aparecerán aquí en tiempo real.</div>';
+    document.getElementById('root').innerHTML=html;
+    return;
+  }
+
+  // Export
+  html+=`<div class="export-bar">
+    <p>📊 ${n} configuración${n>1?'es':''} — Partner Day Barcelona · Julio 2026</p>
+    <div class="export-btns">
+      <button class="btn-export" onclick="exportCSV()">⬇ Exportar CSV</button>
+      <button class="btn-export outline" onclick="exportJSON()">⬇ Exportar JSON</button>
+    </div>
+  </div>`;
+
+  // Precio medio por segmento
+  html+=`<div class="section">
+    <span class="tag">PRECIO MEDIO €/W</span>
+    <div class="section-q">Precio medio configurado por segmento</div>
+    <div class="bar-wrap">`;
+  ['residencial','industrial'].forEach(seg=>{
+    const data = allData.filter(r=>r.segment===seg);
+    if(!data.length) return;
+    const avg = (data.reduce((s,r)=>s+parseFloat(r.price_eur_w||0.135),0)/data.length).toFixed(3).replace('.',',');
+    const pct = Math.min(100, Math.round((parseFloat(avg.replace(',','.'))-0.135)/0.05*100+50));
+    html+=`<div class="bar-row">
+      <div class="bar-label"><span class="tag-seg ${seg==='residencial'?'tag-res':'tag-ind'}">${seg==='residencial'?'Residencial':'Industrial'}</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"><span class="bar-pct">${avg} €/W</span></div></div>
+      <div class="bar-count">${data.length} resp.</div>
+    </div>`;
+  });
+  html+=`</div></div>`;
+
+  // Selecciones por pregunta
+  const qToShow = currentSeg==='industrial'
+    ? ['size','bifacial','warranty_product','warranty_service','fire']
+    : Object.keys(QUESTIONS);
+
+  qToShow.forEach(qid=>{
+    const counts = countSel(qid, currentSeg==='all'?null:currentSeg);
+    const total = Object.values(counts).reduce((a,b)=>a+b,0);
+    if(!total) return;
+    const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    const max = sorted[0]?.[1]||1;
+    html+=`<div class="section">
+      <span class="tag">${QUESTIONS[qid]||qid}</span>
+      <div class="section-q">${getQTitle(qid)}</div>
+      <div class="bar-wrap">`;
+    sorted.forEach(([opt,cnt],i)=>{
+      const pct=Math.round(cnt/total*100);
+      const barW=Math.round(cnt/max*100);
+      const isYellow=i===0;
+      html+=`<div class="bar-row">
+        <div class="bar-label">${opt}</div>
+        <div class="bar-track"><div class="bar-fill ${isYellow?'yellow':''}" style="width:${barW}%"><span class="bar-pct ${isYellow?'dark':''}">${pct}%</span></div></div>
+        <div class="bar-count">${cnt}/${total}</div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+
+  // Rankings
+  ['residencial','industrial'].forEach(seg=>{
+    const data = allData.filter(r=>r.segment===seg);
+    if(!data.length) return;
+    const items = seg==='residencial' ? RANK_RES : RANK_IND;
+    const ranked = avgRanking(items, seg);
+    html+=`<div class="section">
+      <span class="tag">PRIORIDADES · ${seg==='residencial'?'RESIDENCIAL':'INDUSTRIAL'}</span>
+      <div class="section-q">¿Qué es más importante al elegir un panel? (${data.length} resp.)</div>
+      <div class="rank-list">`;
+    ranked.forEach(([item,score],i)=>{
+      html+=`<div class="rank-row ${i===0?'r1':''}">
+        <div class="rank-pos ${i===0?'p1':''}">${i+1}</div>
+        <div class="rank-txt">${item}</div>
+        <div class="rank-score">Score: ${score}</div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+
+  // Empresas
+  const empresas = allData.filter(r=>r.company).map(r=>`${r.company}${r.name?' ('+r.name+')':''}`);
+  if(empresas.length){
+    html+=`<div class="section">
+      <span class="tag">EMPRESAS IDENTIFICADAS</span>
+      <div class="section-q">Partners que han completado el configurador</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">`;
+    [...new Set(empresas)].forEach(e=>{
+      html+=`<span style="background:#f7f4ff;border:1.5px solid #e8d5f0;border-radius:8px;padding:6px 14px;font-size:13px;font-weight:300">${e}</span>`;
+    });
+    html+=`</div></div>`;
+  }
+
+  document.getElementById('root').innerHTML=html;
+}
+
+function getQTitle(qid){
+  const titles={
+    size:'¿Qué formato de panel prefieren tus instalaciones?',
+    backsheet:'¿Qué estética de backsheet prefieren tus clientes?',
+    frame:'¿Marco plata o marco negro?',
+    bifacial:'¿Monofacial o bifacial?',
+    warranty_product:'¿Cuántos años de garantía de producto necesitas?',
+    warranty_service:'¿Incluyes garantía de servicio completo?',
+    fire:'¿Qué clasificación contra incendios necesitan tus proyectos?'
+  };
+  return titles[qid]||qid;
+}
+
+function exportCSV(){
+  let csv='timestamp,empresa,nombre,segmento,panel,precio_eur_w,formato,backsheet,marco,bifacial,garantia_producto,garantia_servicio,fuego,prioridad_1,prioridad_2,prioridad_3\n';
+  allData.forEach(r=>{
+    const s=r.selections||{};
+    const rank=r.ranking||[];
+    const p=(n)=>rank.find(x=>x.position===n)?.title||'';
+    csv+=`"${r.timestamp||''}","${r.company||''}","${r.name||''}","${r.segment||''}","${r.panel||''}","${r.price_eur_w||''}","${s.size||''}","${s.backsheet||''}","${s.frame||''}","${s.bifacial||''}","${s.warranty_product||''}","${s.warranty_service||''}","${s.fire||''}","${p(1)}","${p(2)}","${p(3)}"\n`;
+  });
+  dl(new Blob([csv],{type:'text/csv'}),'sunpower_producto_resultados.csv');
+}
+
+function exportJSON(){
+  dl(new Blob([JSON.stringify({total:allData.length,data:allData},null,2)],{type:'application/json'}),'sunpower_producto_resultados.json');
+}
+
+function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();}
+
+loadData();
+</script>
+</body>
+</html>
