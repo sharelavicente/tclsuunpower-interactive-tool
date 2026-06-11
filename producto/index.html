@@ -151,30 +151,33 @@ const JSONBIN_BIN = "6a296800da38895dfea6bbbe";
 
 async function saveResponse(data) {
   try {
-    // 1. Leer el bin actual
+    // Leer bin actual con Access-Key para bins privados
     const getRes = await fetch(`${JSONBIN_URL}/${JSONBIN_BIN}/latest`, {
-      headers: { "X-Master-Key": JSONBIN_KEY }
+      headers: {
+        "X-Master-Key": JSONBIN_KEY,
+        "X-Access-Key": JSONBIN_KEY
+      }
     });
     const getData = await getRes.json();
-    const existing = getData.record.responses || [];
+    const existing = Array.isArray(getData.record?.responses)
+      ? getData.record.responses
+      : [];
 
-    // 2. Añadir la nueva respuesta
     const newEntry = {
       session_id: SESSION_ID,
       timestamp: new Date().toISOString(),
       event: "Partner Day Barcelona 2026",
       ...data
     };
-    const updated = [...existing, newEntry];
 
-    // 3. Guardar el bin actualizado
     await fetch(`${JSONBIN_URL}/${JSONBIN_BIN}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "X-Master-Key": JSONBIN_KEY
+        "X-Master-Key": JSONBIN_KEY,
+        "X-Access-Key": JSONBIN_KEY
       },
-      body: JSON.stringify({ responses: updated })
+      body: JSON.stringify({ responses: [...existing, newEntry] })
     });
   } catch(e) {
     console.log("Save failed:", e);
