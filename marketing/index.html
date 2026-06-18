@@ -249,6 +249,13 @@ function startSurvey(){
   show('s-q');renderQ(0);
 }
 
+function hasAnswer(q){
+  const a = ans[q.id];
+  if(!a) return false;
+  if(Array.isArray(a)) return a.length > 0;
+  return a.trim() !== '';
+}
+
 function renderQ(i){
   cur=i;
   const q=Qs[i];
@@ -257,7 +264,10 @@ function renderQ(i){
   document.getElementById('qText').textContent=q.text;
   document.getElementById('qSub').textContent=q.sub||'';
   document.getElementById('btnBack').style.visibility=i===0?'hidden':'visible';
+  const isOptional = q.type==='open';
   document.getElementById('btnNext').textContent=i===Qs.length-1?'ENVIAR ✓':'SIGUIENTE →';
+  document.getElementById('btnNext').disabled = isOptional ? false : !hasAnswer(q);
+  document.getElementById('btnNext').style.opacity = (isOptional || hasAnswer(q)) ? '1' : '0.4';
   updateProgress();
   const body=document.getElementById('qBody');
   body.innerHTML='';
