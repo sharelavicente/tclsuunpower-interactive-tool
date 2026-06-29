@@ -86,8 +86,8 @@ body{font-family:'Lexend Deca',sans-serif;background:#f2f3f8;min-height:100vh;mi
         <p>Cuéntanos qué funciona, qué frustra y qué necesitas para vender más. No hay respuestas correctas — solo insights que nos ayudan a mejorar juntos.</p>
       </div>
       <div class="info-row">
-        <div class="info-box"><div class="val">8</div><div class="lbl">Preguntas</div></div>
-        <div class="info-box"><div class="val">5–7'</div><div class="lbl">Minutos</div></div>
+        <div class="info-box"><div class="val">15</div><div class="lbl">Preguntas</div></div>
+        <div class="info-box"><div class="val">8–10'</div><div class="lbl">Minutos</div></div>
         <div class="info-box"><div class="val">🔒</div><div class="lbl">Anónimo</div></div>
       </div>
       <div class="hint-box">📌 Respuestas anónimas, solo para mejora interna. <strong>Empresa obligatoria</strong>, nombre opcional.</div>
@@ -198,7 +198,7 @@ const Qs = [
     ]
   },
   {
-    id:'m6', tag:'MARKETING · COMPETENCIA', type:'multi', max:6,
+    id:'m6', tag:'MARKETING · COMPETENCIA', type:'multi', max:6, hasOtherText:true,
     text:'¿Qué fabricantes están haciendo mejor marketing hoy?',
     sub:'Selecciona todos los que apliquen',
     opts:[
@@ -225,6 +225,77 @@ const Qs = [
       'Campañas con fabricantes',
       'Eventos / ferias',
       'No hago marketing activo'
+    ]
+  },
+  {
+    id:'m9', tag:'MARKETING · LEAD GEN', type:'multi', max:3,
+    text:'Estamos evaluando incorporar en nuestra web una herramienta que permita a los clientes residenciales seleccionar los productos de su instalación (módulos, almacenamiento, bomba de calor, cargador EV, HEMS, etc.) y ofrecerles un servicio exclusivo desde nuestros instaladores autorizados SunPower. El objetivo es aportar rapidez, transparencia y confianza al cliente final, y a la vez proporcionaros leads de alta calidad y muy cualificados.',
+    sub:'Selecciona todas las que apliquen',
+    opts:[
+      'Sí, el cliente residencial de hoy busca velocidad y transparencia',
+      'Puede funcionar, pero preferimos que la web dé un "rango de precios" en lugar de un precio 100% cerrado',
+      'No, preferimos captar el lead de forma tradicional y presupuestar nosotros directamente'
+    ]
+  },
+  {
+    id:'m10', tag:'MARKETING · LEAD GEN', type:'single',
+    text:'Si os pasamos un lead residencial con el kit de componentes ya elegido y el precio cerrado (o un rango de precio) en la web, ¿cuál sería vuestra principal prioridad?',
+    sub:'Selecciona 1 opción',
+    opts:[
+      'Que el margen de instalación por kWp asignado para nosotros esté garantizado y sea justo',
+      'Que el cliente esté realmente cualificado',
+      'Que el cobro esté asegurado de forma rápida tras la instalación'
+    ]
+  },
+  {
+    id:'m11', tag:'MARKETING · LEAD GEN', type:'single',
+    text:'Para fijar los precios en la web, ¿qué modelo de colaboración preferís para el suministro de materiales?',
+    sub:'Selecciona 1 opción',
+    opts:[
+      'Modelo Kit Completo: SunPower pone los materiales (módulos, baterías, aerotermia, etc.); nosotros ponemos mano de obra, ingeniería, legalización, consumibles, estructura y material eléctrico',
+      'Modelo Baremo: nosotros ponemos todo (materiales + mano de obra), pero estamos abiertos a fijar el margen en la web según zona y tamaño de la instalación'
+    ]
+  },
+  {
+    id:'m12', tag:'MARKETING · LEAD GEN', type:'multi', max:5,
+    text:'En instalaciones residenciales, los "extras" de obra pueden variar. ¿Cuáles de estos imprevistos creéis que deben cobrarse obligatoriamente aparte del precio web tras la visita técnica?',
+    sub:'Selecciona todas las que apliquen',
+    opts:[
+      'Metros de cableado excedentes (más de 20-25 metros desde tejado a inversor/cuadro)',
+      'Necesidad de tejas auxiliares específicas, cubiertas de pizarra o estructuras con inclinación especial',
+      'Necesidad de andamiaje especial o elevadores (alturas superiores a 2 plantas)',
+      'Modificaciones o actualizaciones obligatorias del cuadro eléctrico',
+      'Otros'
+    ]
+  },
+  {
+    id:'m13', tag:'MARKETING · LEAD GEN', type:'single',
+    text:'¿Cuál es vuestro radio de acción prioritario para instalaciones residenciales donde podáis asegurar estos precios cerrados sin costes extra de desplazamiento?',
+    sub:'Selecciona 1 opción',
+    opts:[
+      'Solo nuestra provincia',
+      'Nuestra provincia y provincias limítrofes (máximo 1-2 horas de coche)',
+      'Comunidad Autónoma completa'
+    ]
+  },
+  {
+    id:'m14', tag:'MARKETING · LEAD GEN', type:'single',
+    text:'¿Cuántas instalaciones residenciales extra podríais absorber al mes procedentes de este canal web?',
+    sub:'Selecciona 1 opción',
+    opts:[
+      'Entre 1 y 5 instalaciones al mes',
+      'Entre 5 y 15 instalaciones al mes',
+      'Más de 15 instalaciones al mes (tenemos capacidad de escalabilidad inmediata)'
+    ]
+  },
+  {
+    id:'m15', tag:'MARKETING · LEAD GEN', type:'single',
+    text:'Para evaluar y lanzar este proyecto, vamos a validar el nivel de servicio y la tabla de precios residenciales. ¿Os interesa participar en esta fase piloto?',
+    sub:'Selecciona 1 opción',
+    opts:[
+      'Sí',
+      'No quiero evaluar una vez que eventualmente se lance',
+      'No, no estoy interesado'
     ]
   }
 ];
@@ -304,6 +375,20 @@ function renderMulti(body,q){
     wrap.appendChild(item);
   });
   body.appendChild(wrap);
+  if(q.hasOtherText && sel.includes('Otro')){
+    const otherWrap=document.createElement('div');
+    otherWrap.style.marginTop='12px';
+    const inp=document.createElement('input');
+    inp.type='text';
+    inp.placeholder='¿Qué otro fabricante?';
+    inp.value=ans[q.id+'_other']||'';
+    inp.style.cssText='width:100%;border:1.5px solid #e0e0e0;border-radius:9px;padding:14px;font-size:16px;font-family:"Lexend Deca",sans-serif;font-weight:300;outline:none;color:#333';
+    inp.oninput=()=>{ans[q.id+'_other']=inp.value;};
+    inp.onfocus=()=>inp.style.borderColor='#71257F';
+    inp.onblur=()=>inp.style.borderColor='#e0e0e0';
+    otherWrap.appendChild(inp);
+    body.appendChild(otherWrap);
+  }
 }
 
 function renderOpen(body,q){
@@ -339,7 +424,14 @@ async function saveResponse(){
       timestamp:new Date().toISOString(),
       empresa:document.getElementById('inpEmpresa').value||null,
       nombre:document.getElementById('inpNombre').value||null,
-      responses:Qs.map(q=>({id:q.id,tag:q.tag,question:q.text,type:q.type,answer:ans[q.id]??null}))
+      responses:Qs.map(q=>({
+        id:q.id,
+        tag:q.tag,
+        question:q.text,
+        type:q.type,
+        answer:ans[q.id]??null,
+        other_text: q.hasOtherText ? (ans[q.id+'_other']||null) : undefined
+      }))
     };
     await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`,{
       method:'PUT',
