@@ -81,7 +81,10 @@ async function loadData(){
       headers:{'X-Master-Key':JSONBIN_KEY}
     });
     const data = await res.json();
-    allResponses = data.record?.responses || [];
+    const raw = data.record;
+    if(Array.isArray(raw)) allResponses = raw;
+    else if(Array.isArray(raw?.responses)) allResponses = raw.responses;
+    else allResponses = [raw].filter(Boolean);
     render();
   }catch(e){
     document.getElementById('root').innerHTML='<div class="empty">⚠️ Error al cargar los datos.</div>';
@@ -93,6 +96,13 @@ function getAnswers(qid){
     const q = r.responses?.find(x=>x.id===qid);
     return q?.answer??null;
   }).filter(a=>a!==null&&a!=='');
+}
+
+function getOtherTexts(qid){
+  return allResponses.map(r=>{
+    const q = r.responses?.find(x=>x.id===qid);
+    return q?.other_text ? {text:q.other_text, empresa:r.empresa} : null;
+  }).filter(Boolean);
 }
 
 function countOptions(answers){
@@ -126,7 +136,6 @@ function render(){
 
   let html = '';
 
-  // KPIs
   html+=`<div class="kpi-row">
     <div class="kpi"><div class="val">${n}</div><div class="lbl">Respuestas totales</div></div>
     <div class="kpi"><div class="val">${nEmp}</div><div class="lbl">Empresas identificadas</div></div>
@@ -140,7 +149,6 @@ function render(){
     return;
   }
 
-  // Export
   html+=`<div class="export-bar">
     <p>📊 ${n} respuesta${n>1?'s':''} recogida${n>1?'s':''} — Partner Day Barcelona · Julio 2026</p>
     <div class="export-btns">
@@ -149,40 +157,37 @@ function render(){
     </div>
   </div>`;
 
-  // Q1 — ¿Qué apoyo elegirías?
+  // Q1
   const q1 = getAnswers('m1');
   if(q1.length){
-    const counts = countOptions(q1);
     html+=`<div class="section">
       <span class="tag">¿QUÉ OS HACE VENDER MÁS?</span>
       <div class="section-q">Si mañana solo pudieras elegir 1 tipo de apoyo de marketing, ¿cuál elegirías?</div>
-      <div class="bar-wrap">${renderBarChart(counts, q1.length)}</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q1), q1.length)}</div>
     </div>`;
   }
 
-  // Q2 — Lo más frustrante
+  // Q2
   const q2 = getAnswers('m2');
   if(q2.length){
-    const counts = countOptions(q2);
     html+=`<div class="section">
       <span class="tag">LO QUE NO FUNCIONA</span>
       <div class="section-q">¿Qué es lo MÁS frustrante del marketing que recibís actualmente?</div>
-      <div class="bar-wrap">${renderBarChart(counts, q2.length)}</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q2), q2.length)}</div>
     </div>`;
   }
 
-  // Q3 — Modelo de apoyo
+  // Q3
   const q3 = getAnswers('m3');
   if(q3.length){
-    const counts = countOptions(q3);
     html+=`<div class="section">
       <span class="tag">MODELO DE APOYO</span>
       <div class="section-q">¿Qué modelo de apoyo te resulta MÁS útil?</div>
-      <div class="bar-wrap">${renderBarChart(counts, q3.length)}</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q3), q3.length)}</div>
     </div>`;
   }
 
-  // Q4 — Open: por qué ese modelo
+  // Q4 — Open
   const q4 = getAnswers('m4').filter(a=>a&&a.trim()!=='');
   if(q4.length){
     html+=`<div class="section">
@@ -196,29 +201,37 @@ function render(){
     html+=`</div></div>`;
   }
 
-  // Q5 — Herramientas
+  // Q5
   const q5 = getAnswers('m5');
   if(q5.length){
-    const counts = countOptions(q5);
     html+=`<div class="section">
       <span class="tag">HERRAMIENTAS</span>
       <div class="section-q">¿Qué herramienta te ayudaría MÁS a cerrar ventas mañana mismo?</div>
-      <div class="bar-wrap">${renderBarChart(counts, q5.length)}</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q5), q5.length)}</div>
     </div>`;
   }
 
-  // Q6 — Competencia
+  // Q6 — Competencia + textos "Otro"
   const q6 = getAnswers('m6');
   if(q6.length){
-    const counts = countOptions(q6);
     html+=`<div class="section">
       <span class="tag">COMPETENCIA</span>
       <div class="section-q">¿Qué fabricantes están haciendo mejor marketing hoy?</div>
-      <div class="bar-wrap">${renderBarChart(counts, q6.length)}</div>
-    </div>`;
+      <div class="bar-wrap">${renderBarChart(countOptions(q6), q6.length)}</div>`;
+    const otherTexts = getOtherTexts('m6');
+    if(otherTexts.length){
+      html+=`<div style="margin-top:16px">
+        <div style="font-size:12px;font-weight:700;color:#71257F;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Otros fabricantes mencionados</div>
+        <div class="open-list">`;
+      otherTexts.forEach(o=>{
+        html+=`<div class="open-item">"${o.text}"<div class="open-meta">${o.empresa||'Anónimo'}</div></div>`;
+      });
+      html+=`</div></div>`;
+    }
+    html+=`</div>`;
   }
 
-  // Q7 — Open: oro puro
+  // Q7 — Open
   const q7 = getAnswers('m7').filter(a=>a&&a.trim()!=='');
   if(q7.length){
     html+=`<div class="section">
@@ -232,14 +245,83 @@ function render(){
     html+=`</div></div>`;
   }
 
-  // Q8 — Inversión
+  // Q8
   const q8 = getAnswers('m8');
   if(q8.length){
-    const counts = countOptions(q8);
     html+=`<div class="section">
       <span class="tag">INVERSIÓN VS RESULTADO</span>
       <div class="section-q">¿Dónde invertís hoy más esfuerzo en marketing?</div>
-      <div class="bar-wrap">${renderBarChart(counts, q8.length)}</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q8), q8.length)}</div>
+    </div>`;
+  }
+
+  // Q9 — Lead Gen herramienta web
+  const q9 = getAnswers('m9');
+  if(q9.length){
+    html+=`<div class="section">
+      <span class="tag">LEAD GEN</span>
+      <div class="section-q">¿Os interesaría una herramienta web de configuración + lead cualificado?</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q9), q9.length)}</div>
+    </div>`;
+  }
+
+  // Q10 — Prioridad lead
+  const q10 = getAnswers('m10');
+  if(q10.length){
+    html+=`<div class="section">
+      <span class="tag">LEAD GEN</span>
+      <div class="section-q">Con un lead + precio cerrado, ¿cuál sería vuestra principal prioridad?</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q10), q10.length)}</div>
+    </div>`;
+  }
+
+  // Q11 — Modelo colaboración
+  const q11 = getAnswers('m11');
+  if(q11.length){
+    html+=`<div class="section">
+      <span class="tag">LEAD GEN</span>
+      <div class="section-q">¿Qué modelo de colaboración preferís para el suministro de materiales?</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q11), q11.length)}</div>
+    </div>`;
+  }
+
+  // Q12 — Extras de obra
+  const q12 = getAnswers('m12');
+  if(q12.length){
+    html+=`<div class="section">
+      <span class="tag">LEAD GEN</span>
+      <div class="section-q">¿Qué imprevistos deben cobrarse aparte del precio web?</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q12), q12.length)}</div>
+    </div>`;
+  }
+
+  // Q13 — Radio de acción
+  const q13 = getAnswers('m13');
+  if(q13.length){
+    html+=`<div class="section">
+      <span class="tag">LEAD GEN</span>
+      <div class="section-q">¿Cuál es vuestro radio de acción prioritario para precios cerrados sin coste extra?</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q13), q13.length)}</div>
+    </div>`;
+  }
+
+  // Q14 — Capacidad mensual
+  const q14 = getAnswers('m14');
+  if(q14.length){
+    html+=`<div class="section">
+      <span class="tag">LEAD GEN</span>
+      <div class="section-q">¿Cuántas instalaciones extra podríais absorber al mes desde este canal web?</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q14), q14.length)}</div>
+    </div>`;
+  }
+
+  // Q15 — Interés piloto
+  const q15 = getAnswers('m15');
+  if(q15.length){
+    html+=`<div class="section">
+      <span class="tag">LEAD GEN</span>
+      <div class="section-q">¿Os interesa participar en la fase piloto?</div>
+      <div class="bar-wrap">${renderBarChart(countOptions(q15), q15.length)}</div>
     </div>`;
   }
 
@@ -257,11 +339,11 @@ function render(){
 }
 
 function exportCSV(){
-  let csv='session_id,timestamp,empresa,nombre,pregunta_id,tag,pregunta,tipo,respuesta\n';
+  let csv='session_id,timestamp,empresa,nombre,pregunta_id,tag,pregunta,tipo,respuesta,otro_texto\n';
   allResponses.forEach(r=>{
     r.responses?.forEach(q=>{
       const a=Array.isArray(q.answer)?q.answer.join(' | '):(q.answer??'');
-      csv+=`"${r.session_id}","${r.timestamp}","${r.empresa||''}","${r.nombre||''}","${q.id}","${q.tag}","${q.question?.replace(/"/g,'""')}","${q.type}","${String(a).replace(/"/g,'""')}"\n`;
+      csv+=`"${r.session_id}","${r.timestamp}","${r.empresa||''}","${r.nombre||''}","${q.id}","${q.tag}","${q.question?.replace(/"/g,'""')}","${q.type}","${String(a).replace(/"/g,'""')}","${(q.other_text||'').replace(/"/g,'""')}"\n`;
     });
   });
   dl(new Blob([csv],{type:'text/csv'}),'sunpower_marketing_resultados.csv');
