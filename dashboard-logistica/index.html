@@ -87,12 +87,13 @@ const Q_TITLES = {
   l7: 'Para proyectos industriales, ¿cuál es el factor más crítico en las entregas?',
   l8: '¿Qué importancia tendría disponer de más opciones de transporte?',
   l9: 'Nota al servicio de logística actual (0-10)',
-  l10: '¿Estarías dispuesto a dedicar 1h/mes a una reunión de previsión?'
+  l10: '¿Estarías dispuesto a dedicar 1h/mes a una reunión de previsión?',
+  l11: '¿Cuál sería vuestro método preferido para consultar disponibilidad y gestionar pedidos?'
 };
 const Q_TAGS = {
   l1:'LOGÍSTICA RESIDENCIAL', l2:'LOGÍSTICA RESIDENCIAL', l3:'LOGÍSTICA RESIDENCIAL', l4:'LOGÍSTICA RESIDENCIAL',
   l5:'LOGÍSTICA INDUSTRIAL', l6:'LOGÍSTICA INDUSTRIAL', l7:'LOGÍSTICA INDUSTRIAL', l8:'LOGÍSTICA INDUSTRIAL',
-  l9:'VALORACIÓN', l10:'OPERATIONS'
+  l9:'VALORACIÓN', l10:'OPERATIONS', l11:'LOGÍSTICA Y OPERACIONES'
 };
 
 async function loadData(){
@@ -148,7 +149,6 @@ function render(){
   const nEmp = allResponses.filter(r=>r.empresa).length;
   const last = n>0 ? new Date(allResponses[allResponses.length-1].timestamp).toLocaleString('es-ES') : '—';
 
-  // Nota media de logística (l9)
   const notas = getAnswers('l9').map(Number).filter(v=>!isNaN(v));
   const avgNota = notas.length ? (notas.reduce((a,b)=>a+b,0)/notas.length).toFixed(1) : '—';
 
@@ -175,7 +175,6 @@ function render(){
     </div>
   </div>`;
 
-  // Nota media destacada
   if(notas.length){
     html+=`<div class="section">
       <span class="tag">VALORACIÓN GENERAL</span>
@@ -188,8 +187,7 @@ function render(){
     </div>`;
   }
 
-  // Resto de preguntas (single, multi)
-  ['l1','l2','l3','l4','l5','l6','l7','l8','l10'].forEach(qid=>{
+  ['l1','l2','l3','l4','l5','l6','l7','l8','l10','l11'].forEach(qid=>{
     const answers = getAnswers(qid);
     if(!answers.length) return;
     const counts = countOptions(answers);
@@ -200,7 +198,6 @@ function render(){
     </div>`;
   });
 
-  // Empresas
   const empresas = [...new Set(allResponses.filter(r=>r.empresa).map(r=>r.empresa+(r.nombre?' ('+r.nombre+')':'')))];
   if(empresas.length){
     html+=`<div class="section">
