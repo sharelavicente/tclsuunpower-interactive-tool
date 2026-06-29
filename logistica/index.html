@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SunPower | Roundtable Logística 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Lexend Deca',sans-serif;background:#f2f3f8;min-height:100vh;min-height:-webkit-fill-available;display:flex;flex-direction:column;align-items:center}
+#app{width:100%;max-width:520px;min-height:100vh;display:flex;flex-direction:column;background:#fff}
+
+.hdr{background:#71257F;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{color:#FFDF00;font-weight:700;font-size:18px;letter-spacing:2px}
+.step-badge{background:#FFDF00;color:#71257F;font-weight:700;font-size:12px;padding:4px 12px;border-radius:20px;letter-spacing:.5px}
+
+.prog-wrap{background:#f0e6f4;height:4px}
+.prog-fill{height:4px;background:#FFDF00;transition:width .4s ease;width:0%}
+
+.body{flex:1;padding:24px 20px 90px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+.event-label{font-size:11px;font-weight:700;color:#71257F;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.event-title{font-size:26px;font-weight:700;color:#71257F;line-height:1.2;letter-spacing:-.5px;margin-bottom:20px}
+.intro-hero{background:#71257F;border-radius:14px;padding:24px 20px;margin-bottom:20px}
+.intro-hero h2{color:#FFDF00;font-size:17px;font-weight:700;margin-bottom:8px}
+.intro-hero p{color:rgba(255,255,255,.8);font-size:13px;font-weight:300;line-height:1.7}
+.info-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.info-box{background:#fdf7ff;border:1.5px solid #e8d5f0;border-radius:10px;padding:14px 8px;text-align:center}
+.info-box .val{font-size:20px;font-weight:700;color:#71257F}
+.info-box .lbl{font-size:11px;color:#888;margin-top:2px;font-weight:300}
+.hint-box{background:#f7f7f7;border-left:3px solid #FFDF00;border-radius:6px;padding:12px 14px;font-size:13px;color:#555;font-weight:300;line-height:1.6;margin-bottom:24px}
+.hint-box strong{color:#71257F}
+
+.sec-tag{display:inline-block;background:#71257F;color:#fff;font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.q-num{font-size:12px;color:#999;font-weight:300;margin-bottom:6px}
+.q-text{font-size:17px;font-weight:700;color:#71257F;line-height:1.4;margin-bottom:8px;letter-spacing:-.3px}
+.q-sub{font-size:15px;font-weight:400;color:#444;margin-bottom:18px;line-height:1.5}
+
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1.5px solid #e0e0e0;border-radius:10px;cursor:pointer;transition:all .15s;min-height:52px;touch-action:manipulation}
+.opt:hover{border-color:#71257F;background:#f5edf7}
+.opt.sel{border-color:#71257F;background:#f5edf7}
+.opt-check{width:22px;height:22px;border-radius:50%;border:2px solid #ddd;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s}
+.opt.sel .opt-check{background:#71257F;border-color:#71257F;color:#FFDF00}
+.opt-check-sq{width:22px;height:22px;border-radius:5px;border:2px solid #ddd;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s}
+.opt.sel .opt-check-sq{background:#71257F;border-color:#71257F;color:#FFDF00}
+.opt-lbl{font-size:14px;font-weight:300;color:#333;flex:1;line-height:1.4}
+.multi-lim{font-size:13px;color:#888;font-weight:300;margin-bottom:12px}
+
+.scale-wrap{}
+.scale-lbls{display:flex;justify-content:space-between;font-size:11px;color:#aaa;font-weight:300;margin-bottom:10px}
+.scale-btns{display:flex;gap:6px}
+.scale-btn{flex:1;min-height:44px;border:1.5px solid #e0e0e0;background:#fff;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;color:#333;font-family:'Lexend Deca',sans-serif;touch-action:manipulation;transition:all .15s}
+.scale-btn:hover{border-color:#71257F;background:#f5edf7}
+.scale-btn.sel{background:#71257F;border-color:#71257F;color:#FFDF00}
+
+.open-wrap textarea{width:100%;min-height:110px;border:1.5px solid #e0e0e0;border-radius:10px;padding:14px;font-size:16px;font-family:'Lexend Deca',sans-serif;font-weight:300;resize:vertical;outline:none;color:#333;transition:border .15s}
+.open-wrap textarea:focus{border-color:#71257F}
+.char-count{text-align:right;font-size:11px;color:#bbb;margin-top:6px;font-weight:300}
+
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;background:#fff;border-top:1px solid #eee;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:99}
+.btn-primary{background:#FFDF00;color:#292929;font-family:'Lexend Deca',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:15px 24px;border-radius:11px;border:none;cursor:pointer;touch-action:manipulation;transition:all .15s}
+.btn-primary:hover{background:#71257F;color:#FFDF00}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-back{background:transparent;color:#999;font-family:'Lexend Deca',sans-serif;font-size:13px;font-weight:300;border:1.5px solid #e0e0e0;padding:13px 18px;border-radius:11px;cursor:pointer;touch-action:manipulation;transition:all .15s}
+.btn-back:hover{border-color:#71257F;color:#71257F}
+.btn-skip{background:none;border:1.5px solid #ccc;color:#666;font-size:13px;font-weight:400;font-family:'Lexend Deca',sans-serif;cursor:pointer;padding:13px 18px;border-radius:11px;letter-spacing:.5px;transition:all .15s}
+.btn-skip:hover{border-color:#71257F;color:#71257F}
+
+.ty-card{background:#71257F;border-radius:14px;padding:32px 24px;text-align:center;margin-bottom:20px}
+.ty-card h2{color:#FFDF00;font-size:22px;font-weight:700;margin-bottom:8px}
+.ty-card p{color:rgba(255,255,255,.8);font-size:13px;font-weight:300;line-height:1.7}
+
+.screen{display:none}
+.screen.active{display:block}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="hdr">
+    <div class="logo">SUNPOWER</div>
+    <div class="step-badge" id="stepBadge">Partner Day</div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
+
+  <div class="body">
+
+    <!-- INTRO -->
+    <div class="screen active" id="s-intro">
+      <div class="event-label">PARTNER DAY BARCELONA · JULIO 2026</div>
+      <div class="event-title">Roundtable<br>Logística 2026</div>
+      <div class="intro-hero">
+        <h2>Tu opinión mejora la logística</h2>
+        <p>Queremos entender qué servicios de logística valoras más, en residencial e industrial. No hay respuestas correctas — solo insights que nos ayudan a mejorar juntos.</p>
+      </div>
+      <div class="info-row">
+        <div class="info-box"><div class="val">10</div><div class="lbl">Preguntas</div></div>
+        <div class="info-box"><div class="val">5–7'</div><div class="lbl">Minutos</div></div>
+        <div class="info-box"><div class="val">🔒</div><div class="lbl">Anónimo</div></div>
+      </div>
+      <div class="hint-box">📌 Respuestas anónimas, solo para mejora interna. <strong>Empresa obligatoria</strong>, nombre opcional.</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px">
+        <div>
+          <label style="font-size:12px;font-weight:700;color:#71257F;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Empresa <span style="color:#DC2D81;font-weight:700">*</span></label>
+          <input id="inpEmpresa" type="text" placeholder="Nombre de tu empresa" style="width:100%;border:1.5px solid #e0e0e0;border-radius:9px;padding:14px;font-size:16px;font-family:'Lexend Deca',sans-serif;font-weight:300;outline:none;color:#333" onfocus="this.style.borderColor='#71257F'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:700;color:#71257F;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Nombre <span style="color:#bbb;font-weight:300">(opcional)</span></label>
+          <input id="inpNombre" type="text" placeholder="Tu nombre" style="width:100%;border:1.5px solid #e0e0e0;border-radius:9px;padding:14px;font-size:16px;font-family:'Lexend Deca',sans-serif;font-weight:300;outline:none;color:#333" onfocus="this.style.borderColor='#71257F'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+      </div>
+      <div id="empresa-error" style="color:#DC2D81;font-size:12px;margin-bottom:12px;display:none">⚠️ Por favor, introduce el nombre de tu empresa para continuar.</div>
+      <button class="btn-primary" style="width:100%;font-size:15px;padding:17px" onclick="startSurvey()">COMENZAR →</button>
+    </div>
+
+    <!-- QUESTION -->
+    <div class="screen" id="s-q">
+      <div class="sec-tag" id="qTag"></div>
+      <div class="q-num" id="qNum"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="q-sub" id="qSub"></div>
+      <div id="qBody"></div>
+    </div>
+
+    <!-- THANKS -->
+    <div class="screen" id="s-ty">
+      <div class="ty-card">
+        <div style="font-size:44px;margin-bottom:12px">🎉</div>
+        <h2>¡Gracias por tu feedback!</h2>
+        <p>SunPower usará estos insights para mejorar el servicio de logística al canal. Tu voz importa.</p>
+      </div>
+      <button class="btn-primary" style="width:100%;font-size:14px;padding:16px" onclick="resetSurvey()">ENVIAR OTRA RESPUESTA</button>
+    </div>
+
+  </div>
+
+  <div class="nav" id="navBar" style="display:none">
+    <button class="btn-back" id="btnBack" onclick="prevQ()">← Anterior</button>
+    <button class="btn-skip" onclick="skipQ()">Omitir</button>
+    <button class="btn-primary" id="btnNext" onclick="nextQ()">SIGUIENTE →</button>
+  </div>
+</div>
+
+<script>
+const SESSION_ID = Date.now().toString(36)+'-'+Math.random().toString(36).substring(2,8);
+const JSONBIN_KEY = '$2a$10$OzmEbFf894axitPqkgWb.OUTKCUQ76nd8gX7t2/NgsdxpuAYmfnMK';
+const JSONBIN_BIN = '6a423ecfda38895dfe0f1f92';
+
+const Qs = [
+  {
+    id:'l1', tag:'LOGÍSTICA RESIDENCIAL', type:'single',
+    text:'¿Cuántas instalaciones residenciales haces por mes?',
+    sub:'Selecciona 1 opción',
+    opts:['<4 instalaciones por mes','Entre 4 y 20 por mes','Más de 20 por mes','No hago residencial']
+  },
+  {
+    id:'l2', tag:'LOGÍSTICA RESIDENCIAL', type:'single',
+    text:'¿Cuál es la frecuencia de suministro ideal para módulos y baterías en el segmento residencial, teniendo en cuenta que el coste de transporte depende del volumen?',
+    sub:'Selecciona 1 opción',
+    opts:[
+      'Just-in-Time: lotes pequeños (1–4 pallets) semanales según obras de la semana siguiente (1–2 cent/W)',
+      'Stock mensual o multimensual: volúmenes de 8–12 pallets para cubrir todo el mes o más (0,008 €/W)',
+      'Puedo gestionar camiones completos (0,005 €/W)',
+      'No hago residencial'
+    ]
+  },
+  {
+    id:'l3', tag:'LOGÍSTICA RESIDENCIAL', type:'multi', max:4,
+    text:'¿Cuál es el principal cuello de botella al recibir nuestros palets de módulos y baterías en su sede?',
+    sub:'Selecciona todas las que apliquen',
+    opts:[
+      'Espacio: dificultad para almacenar más de 8 palets',
+      'Medios de descarga: falta de carretillas elevadoras',
+      'Medios de descarga: falta de espacio de maniobra para camiones grandes (13–15 metros)',
+      'Ninguno, la recepción en nuestro almacén es ágil y sin problemas'
+    ]
+  },
+  {
+    id:'l4', tag:'LOGÍSTICA RESIDENCIAL', type:'multi', max:4,
+    text:'Para los proyectos residenciales, ¿cuál es el factor más crítico en las entregas?',
+    sub:'Selecciona todas las que apliquen',
+    opts:[
+      'Conocer el día exacto de llegada al almacén para organizar las furgonetas de los instaladores',
+      'Disponer de seguimiento GPS en tiempo real del camión',
+      'Llamada el día antes de las entregas',
+      'Otros'
+    ]
+  },
+  {
+    id:'l5', tag:'LOGÍSTICA INDUSTRIAL', type:'single',
+    text:'¿Cuántas instalaciones industriales haces por año?',
+    sub:'Selecciona 1 opción',
+    opts:['≤4','Entre 4 y 10','Más de 10','No hago industrial']
+  },
+  {
+    id:'l6', tag:'LOGÍSTICA INDUSTRIAL', type:'multi', max:4,
+    text:'En instalaciones industriales, ¿suele entregarse directamente en obra?',
+    sub:'Selecciona todas las que apliquen',
+    opts:['Sí, siempre','Sí, solo plantas grandes','No','No hago industrial']
+  },
+  {
+    id:'l7', tag:'LOGÍSTICA INDUSTRIAL', type:'multi', max:4,
+    text:'Para los proyectos industriales, ¿cuál es el factor más crítico en las entregas?',
+    sub:'Selecciona todas las que apliquen',
+    opts:[
+      'La puntualidad: el camión debe llegar exactamente cuando las grúas o equipos de elevación alquilados estén listos',
+      'Necesitamos medio de descarga en obras industriales',
+      'Cada obra es diferente, queremos elegir las opciones en cada pedido',
+      'Otros'
+    ]
+  },
+  {
+    id:'l8', tag:'LOGÍSTICA INDUSTRIAL', type:'single',
+    text:'¿Qué importancia tendría para ti disponer de más opciones de transporte (diferentes proveedores) entre las que elegir al realizar el pedido?',
+    sub:'Selecciona 1 opción',
+    opts:[
+      'Mucho; contar con más proveedores me permitiría elegir el más eficiente de mi zona, aunque su coste fuera superior',
+      'Podría interesarme, pero solo si no supone ningún impacto en los costes',
+      'No me interesa tener más opciones de logística. Espero que os encarguéis vosotros de todo'
+    ]
+  },
+  {
+    id:'l9', tag:'LOGÍSTICA · VALORACIÓN', type:'scale', min:0, max:10,
+    text:'¿Qué nota le darías, en general, a nuestro servicio de logística actual?',
+    sub:'0 = Muy malo · 10 = Excelente',
+    labels:['Muy malo','Excelente']
+  },
+  {
+    id:'l10', tag:'OPERATIONS', type:'single',
+    text:'Para gestionar el almacén de forma más eficiente, reducir costes y disponer siempre del material necesario, ¿estarías dispuesto a dedicar una hora al mes a reunirte con tu responsable de ventas para elaborar una previsión?',
+    sub:'Selecciona 1 opción',
+    opts:[
+      'Sí. Me comprometo a dedicar una hora al mes',
+      'Puedo hacerlo, pero no con tanta frecuencia',
+      'No tengo tiempo o prefiero no hacerlo'
+    ]
+  }
+];
+
+let cur=0;
+const ans={};
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+
+function updateProgress(){
+  document.getElementById('progFill').style.width=(cur/Qs.length*100)+'%';
+  document.getElementById('stepBadge').textContent=cur+' / '+Qs.length;
+}
+
+function startSurvey(){
+  const empresa=document.getElementById('inpEmpresa').value.trim();
+  const errEl=document.getElementById('empresa-error');
+  if(!empresa){errEl.style.display='block';return;}
+  errEl.style.display='none';
+  document.getElementById('navBar').style.display='flex';
+  show('s-q');renderQ(0);
+}
+
+function hasAnswer(q){
+  const a = ans[q.id];
+  if(a===undefined||a===null) return false;
+  if(Array.isArray(a)) return a.length>0;
+  if(typeof a==='string') return a.trim()!=='';
+  return true; // numbers (scale)
+}
+
+function renderQ(i){
+  cur=i;
+  const q=Qs[i];
+  document.getElementById('qTag').textContent=q.tag;
+  document.getElementById('qNum').textContent='Pregunta '+(i+1)+' de '+Qs.length;
+  document.getElementById('qText').textContent=q.text;
+  document.getElementById('qSub').textContent=q.sub||'';
+  document.getElementById('btnBack').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('btnNext').textContent=i===Qs.length-1?'ENVIAR ✓':'SIGUIENTE →';
+  const isOptional = q.type==='open';
+  document.getElementById('btnNext').disabled = isOptional ? false : !hasAnswer(q);
+  updateProgress();
+  const body=document.getElementById('qBody');
+  body.innerHTML='';
+  if(q.type==='single') renderSingle(body,q);
+  else if(q.type==='multi') renderMulti(body,q);
+  else if(q.type==='scale') renderScale(body,q);
+  else if(q.type==='open') renderOpen(body,q);
+}
+
+function renderSingle(body,q){
+  const wrap=document.createElement('div');wrap.className='opts';
+  q.opts.forEach(o=>{
+    const item=document.createElement('div');
+    item.className='opt'+(ans[q.id]===o?' sel':'');
+    item.innerHTML=`<div class="opt-check">${ans[q.id]===o?'✓':''}</div><div class="opt-lbl">${o}</div>`;
+    item.onclick=()=>{ans[q.id]=o;renderQ(cur);};
+    wrap.appendChild(item);
+  });
+  body.appendChild(wrap);
+}
+
+function renderMulti(body,q){
+  const lim=document.createElement('div');lim.className='multi-lim';lim.textContent=q.sub;body.appendChild(lim);
+  const wrap=document.createElement('div');wrap.className='opts';
+  const sel=ans[q.id]||[];
+  q.opts.forEach(o=>{
+    const item=document.createElement('div');
+    item.className='opt'+(sel.includes(o)?' sel':'');
+    item.innerHTML=`<div class="opt-check-sq">${sel.includes(o)?'✓':''}</div><div class="opt-lbl">${o}</div>`;
+    item.onclick=()=>{
+      let c=ans[q.id]||[];
+      c=c.includes(o)?c.filter(x=>x!==o):(c.length<(q.max||99)?[...c,o]:c);
+      ans[q.id]=c;renderQ(cur);
+    };
+    wrap.appendChild(item);
+  });
+  body.appendChild(wrap);
+}
+
+function renderScale(body,q){
+  const wrap=document.createElement('div');wrap.className='scale-wrap';
+  const lbl=document.createElement('div');lbl.className='scale-lbls';
+  lbl.innerHTML=`<span>${q.labels[0]}</span><span>${q.labels[1]}</span>`;
+  wrap.appendChild(lbl);
+  const btns=document.createElement('div');btns.className='scale-btns';
+  for(let n=q.min;n<=q.max;n++){
+    const b=document.createElement('button');
+    b.className='scale-btn'+(ans[q.id]===n?' sel':'');
+    b.textContent=n;
+    b.onclick=()=>{ans[q.id]=n;renderQ(cur);};
+    btns.appendChild(b);
+  }
+  wrap.appendChild(btns);
+  body.appendChild(wrap);
+}
+
+function renderOpen(body,q){
+  const wrap=document.createElement('div');wrap.className='open-wrap';
+  const ta=document.createElement('textarea');
+  ta.placeholder=q.placeholder||'Escribe aquí...';ta.value=ans[q.id]||'';
+  const cc=document.createElement('div');cc.className='char-count';cc.textContent=ta.value.length+' caracteres';
+  ta.oninput=()=>{ans[q.id]=ta.value;cc.textContent=ta.value.length+' caracteres'};
+  wrap.appendChild(ta);wrap.appendChild(cc);body.appendChild(wrap);
+}
+
+function nextQ(){
+  const q = Qs[cur];
+  const isOptional = q.type==='open';
+  if(!isOptional && !hasAnswer(q)) return;
+  cur<Qs.length-1?renderQ(cur+1):finishSurvey();
+}
+function prevQ(){if(cur>0) renderQ(cur-1)}
+function skipQ(){if(cur<Qs.length-1) renderQ(cur+1); else finishSurvey()}
+
+async function finishSurvey(){
+  document.getElementById('progFill').style.width='100%';
+  document.getElementById('stepBadge').textContent=Qs.length+' / '+Qs.length;
+  document.getElementById('navBar').style.display='none';
+  show('s-ty');
+  await saveResponse();
+}
+
+async function saveResponse(){
+  try{
+    const getRes=await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`,{
+      headers:{'X-Master-Key':JSONBIN_KEY}
+    });
+    const getData=await getRes.json();
+    const existing=getData.record?.responses||[];
+    const newEntry={
+      session_id:SESSION_ID,
+      timestamp:new Date().toISOString(),
+      empresa:document.getElementById('inpEmpresa').value||null,
+      nombre:document.getElementById('inpNombre').value||null,
+      responses:Qs.map(q=>({id:q.id,tag:q.tag,question:q.text,type:q.type,answer:ans[q.id]??null}))
+    };
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY},
+      body:JSON.stringify({responses:[...existing,newEntry]})
+    });
+  }catch(e){console.log('Save failed:',e)}
+}
+
+function resetSurvey(){
+  Object.keys(ans).forEach(k=>delete ans[k]);
+  document.getElementById('inpEmpresa').value='';
+  document.getElementById('inpNombre').value='';
+  document.getElementById('navBar').style.display='none';
+  document.getElementById('progFill').style.width='0%';
+  document.getElementById('stepBadge').textContent='Partner Day';
+  cur=0;
+  show('s-intro');
+}
+</script>
+</body>
+</html>
