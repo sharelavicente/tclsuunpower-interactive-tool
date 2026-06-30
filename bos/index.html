@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SunPower | Roundtable BOS 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Lexend Deca',sans-serif;background:#f2f3f8;min-height:100vh;min-height:-webkit-fill-available;display:flex;flex-direction:column;align-items:center}
+#app{width:100%;max-width:520px;min-height:100vh;display:flex;flex-direction:column;background:#fff}
+
+.hdr{background:#71257F;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{color:#FFDF00;font-weight:700;font-size:18px;letter-spacing:2px}
+.step-badge{background:#FFDF00;color:#71257F;font-weight:700;font-size:12px;padding:4px 12px;border-radius:20px;letter-spacing:.5px}
+
+.prog-wrap{background:#f0e6f4;height:4px}
+.prog-fill{height:4px;background:#FFDF00;transition:width .4s ease;width:0%}
+
+.body{flex:1;padding:24px 20px 90px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+.event-label{font-size:11px;font-weight:700;color:#71257F;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.event-title{font-size:26px;font-weight:700;color:#71257F;line-height:1.2;letter-spacing:-.5px;margin-bottom:20px}
+.intro-hero{background:#71257F;border-radius:14px;padding:24px 20px;margin-bottom:20px}
+.intro-hero h2{color:#FFDF00;font-size:17px;font-weight:700;margin-bottom:8px}
+.intro-hero p{color:rgba(255,255,255,.8);font-size:13px;font-weight:300;line-height:1.7}
+.info-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.info-box{background:#fdf7ff;border:1.5px solid #e8d5f0;border-radius:10px;padding:14px 8px;text-align:center}
+.info-box .val{font-size:20px;font-weight:700;color:#71257F}
+.info-box .lbl{font-size:11px;color:#888;margin-top:2px;font-weight:300}
+.hint-box{background:#f7f7f7;border-left:3px solid #FFDF00;border-radius:6px;padding:12px 14px;font-size:13px;color:#555;font-weight:300;line-height:1.6;margin-bottom:24px}
+.hint-box strong{color:#71257F}
+
+.sec-tag{display:inline-block;background:#71257F;color:#fff;font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.q-num{font-size:12px;color:#999;font-weight:300;margin-bottom:6px}
+.q-text{font-size:17px;font-weight:700;color:#71257F;line-height:1.4;margin-bottom:8px;letter-spacing:-.3px}
+.q-sub{font-size:15px;font-weight:400;color:#444;margin-bottom:18px;line-height:1.5}
+
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1.5px solid #e0e0e0;border-radius:10px;cursor:pointer;transition:all .15s;min-height:52px;touch-action:manipulation}
+.opt:hover{border-color:#71257F;background:#f5edf7}
+.opt.sel{border-color:#71257F;background:#f5edf7}
+.opt-check{width:22px;height:22px;border-radius:50%;border:2px solid #ddd;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s}
+.opt.sel .opt-check{background:#71257F;border-color:#71257F;color:#FFDF00}
+.opt-check-sq{width:22px;height:22px;border-radius:5px;border:2px solid #ddd;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s}
+.opt.sel .opt-check-sq{background:#71257F;border-color:#71257F;color:#FFDF00}
+.opt-lbl{font-size:14px;font-weight:300;color:#333;flex:1;line-height:1.4}
+.multi-lim{font-size:13px;color:#888;font-weight:300;margin-bottom:12px}
+
+.rank-hint{font-size:13px;color:#888;font-weight:300;margin-bottom:12px}
+.rank-list{display:flex;flex-direction:column;gap:8px}
+.rank-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f7f4ff;border:1.5px solid #e0e0e0;border-radius:10px;cursor:grab;user-select:none;touch-action:none;min-height:52px}
+.rank-item.dragging{opacity:.4;border-color:#71257F}
+.rank-item.drag-over{border-color:#71257F;background:#f5edf7}
+.rank-pos{width:26px;height:26px;border-radius:50%;background:#71257F;color:#FFDF00;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rank-pos.p1{background:#FFDF00;color:#71257F}
+.rank-txt{font-size:13px;font-weight:300;flex:1;color:#333;line-height:1.4}
+.rank-arrows{display:flex;flex-direction:column;gap:3px}
+.rank-arr{background:#fff;border:1.5px solid #e0e0e0;border-radius:5px;width:28px;height:24px;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;color:#999;transition:all .1s;touch-action:manipulation}
+.rank-arr:hover{background:#71257F;border-color:#71257F;color:#FFDF00}
+
+.open-wrap textarea{width:100%;min-height:110px;border:1.5px solid #e0e0e0;border-radius:10px;padding:14px;font-size:16px;font-family:'Lexend Deca',sans-serif;font-weight:300;resize:vertical;outline:none;color:#333;transition:border .15s}
+.open-wrap textarea:focus{border-color:#71257F}
+.char-count{text-align:right;font-size:11px;color:#bbb;margin-top:6px;font-weight:300}
+
+.other-input{margin-top:12px}
+.other-input input{width:100%;border:1.5px solid #e0e0e0;border-radius:9px;padding:14px;font-size:16px;font-family:'Lexend Deca',sans-serif;font-weight:300;outline:none;color:#333}
+.other-input input:focus{border-color:#71257F}
+
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;background:#fff;border-top:1px solid #eee;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:99}
+.btn-primary{background:#FFDF00;color:#292929;font-family:'Lexend Deca',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:15px 24px;border-radius:11px;border:none;cursor:pointer;touch-action:manipulation;transition:all .15s}
+.btn-primary:hover{background:#71257F;color:#FFDF00}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-back{background:transparent;color:#999;font-family:'Lexend Deca',sans-serif;font-size:13px;font-weight:300;border:1.5px solid #e0e0e0;padding:13px 18px;border-radius:11px;cursor:pointer;touch-action:manipulation;transition:all .15s}
+.btn-back:hover{border-color:#71257F;color:#71257F}
+.btn-skip{background:none;border:1.5px solid #ccc;color:#666;font-size:13px;font-weight:400;font-family:'Lexend Deca',sans-serif;cursor:pointer;padding:13px 18px;border-radius:11px;letter-spacing:.5px;transition:all .15s}
+.btn-skip:hover{border-color:#71257F;color:#71257F}
+
+.ty-card{background:#71257F;border-radius:14px;padding:32px 24px;text-align:center;margin-bottom:20px}
+.ty-card h2{color:#FFDF00;font-size:22px;font-weight:700;margin-bottom:8px}
+.ty-card p{color:rgba(255,255,255,.8);font-size:13px;font-weight:300;line-height:1.7}
+
+.sec-divider{background:#71257F;border-radius:16px;padding:32px 24px;text-align:center;margin-bottom:0}
+.sec-divider-icon{font-size:40px;margin-bottom:14px}
+.sec-divider-tag{font-size:11px;font-weight:700;color:#FFDF00;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.sec-divider-title{font-size:22px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:10px}
+.sec-divider-desc{font-size:13px;font-weight:300;color:rgba(255,255,255,.8);line-height:1.7}
+.sec-divider-count{font-size:12px;color:#FFDF00;font-weight:700;margin-top:14px}
+
+.screen{display:none}
+.screen.active{display:block}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="hdr">
+    <div class="logo">SUNPOWER</div>
+    <div class="step-badge" id="stepBadge">Partner Day</div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
+
+  <div class="body">
+
+    <!-- INTRO -->
+    <div class="screen active" id="s-intro">
+      <div class="event-label">PARTNER DAY BARCELONA · JULIO 2026</div>
+      <div class="event-title">Roundtable<br>BOS 2026</div>
+      <div class="intro-hero">
+        <h2>Tu opinión mejora nuestro BOS</h2>
+        <p>Queremos entender mejor cómo trabajáis con baterías, aerotermia y cargadores EV en residencial e industrial. La encuesta está dividida en 4 bloques: Batería Residencial, Batería Industrial, Aerotermia y Cargadores EV.</p>
+      </div>
+      <div class="info-row">
+        <div class="info-box"><div class="val">19</div><div class="lbl">Preguntas</div></div>
+        <div class="info-box"><div class="val">8–10'</div><div class="lbl">Minutos</div></div>
+        <div class="info-box"><div class="val">🔒</div><div class="lbl">Anónimo</div></div>
+      </div>
+      <div class="hint-box">📌 Respuestas anónimas, solo para mejora interna. <strong>Empresa obligatoria</strong>, nombre opcional.</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px">
+        <div>
+          <label style="font-size:12px;font-weight:700;color:#71257F;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Empresa <span style="color:#DC2D81;font-weight:700">*</span></label>
+          <input id="inpEmpresa" type="text" placeholder="Nombre de tu empresa" style="width:100%;border:1.5px solid #e0e0e0;border-radius:9px;padding:14px;font-size:16px;font-family:'Lexend Deca',sans-serif;font-weight:300;outline:none;color:#333" onfocus="this.style.borderColor='#71257F'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:700;color:#71257F;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Nombre <span style="color:#bbb;font-weight:300">(opcional)</span></label>
+          <input id="inpNombre" type="text" placeholder="Tu nombre" style="width:100%;border:1.5px solid #e0e0e0;border-radius:9px;padding:14px;font-size:16px;font-family:'Lexend Deca',sans-serif;font-weight:300;outline:none;color:#333" onfocus="this.style.borderColor='#71257F'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+      </div>
+      <div id="empresa-error" style="color:#DC2D81;font-size:12px;margin-bottom:12px;display:none">⚠️ Por favor, introduce el nombre de tu empresa para continuar.</div>
+      <button class="btn-primary" style="width:100%;font-size:15px;padding:17px" onclick="startSurvey()">COMENZAR →</button>
+    </div>
+
+    <!-- SECTION DIVIDER -->
+    <div class="screen" id="s-divider">
+      <div class="sec-divider">
+        <div class="sec-divider-icon" id="dividerIcon"></div>
+        <div class="sec-divider-tag" id="dividerTag"></div>
+        <div class="sec-divider-title" id="dividerTitle"></div>
+        <div class="sec-divider-desc" id="dividerDesc"></div>
+        <div class="sec-divider-count" id="dividerCount"></div>
+        <button class="btn-primary" style="width:100%;margin-top:24px;background:#FFDF00" onclick="continueFromDivider()">CONTINUAR →</button>
+      </div>
+    </div>
+
+    <!-- QUESTION -->
+    <div class="screen" id="s-q">
+      <div class="sec-tag" id="qTag"></div>
+      <div class="q-num" id="qNum"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="q-sub" id="qSub"></div>
+      <div id="qBody"></div>
+    </div>
+
+    <!-- THANKS -->
+    <div class="screen" id="s-ty">
+      <div class="ty-card">
+        <div style="font-size:44px;margin-bottom:12px">🎉</div>
+        <h2>¡Gracias por tu feedback!</h2>
+        <p>SunPower usará estos insights para mejorar el BOS: baterías, aerotermia y cargadores EV. Tu voz importa.</p>
+      </div>
+      <button class="btn-primary" style="width:100%;font-size:14px;padding:16px" onclick="resetSurvey()">ENVIAR OTRA RESPUESTA</button>
+    </div>
+
+  </div>
+
+  <div class="nav" id="navBar" style="display:none">
+    <button class="btn-back" id="btnBack" onclick="prevQ()">← Anterior</button>
+    <button class="btn-skip" onclick="skipQ()">Omitir</button>
+    <button class="btn-primary" id="btnNext" onclick="nextQ()">SIGUIENTE →</button>
+  </div>
+</div>
+
+<script>
+const SESSION_ID = Date.now().toString(36)+'-'+Math.random().toString(36).substring(2,8);
+const JSONBIN_KEY = '$2a$10$OzmEbFf894axitPqkgWb.OUTKCUQ76nd8gX7t2/NgsdxpuAYmfnMK';
+const JSONBIN_BIN = '6a43864ada38895dfe14cddb';
+
+const Qs = [
+  // BATERÍA RESIDENCIAL
+  {
+    id:'b1', tag:'BOS · BATERÍA RESIDENCIAL', type:'single',
+    text:'¿Cuál es tu actual porcentaje de instalaciones nuevas con baterías?',
+    sub:'Selecciona 1 opción',
+    opts:['100%','75%','50%','25% o menos','Solo inversor']
+  },
+  {
+    id:'b2', tag:'BOS · BATERÍA RESIDENCIAL', type:'single',
+    text:'¿Qué cargas incluís dentro del backup?',
+    sub:'Selecciona 1 opción',
+    opts:['Todas las cargas','Cargas críticas']
+  },
+  {
+    id:'b3', tag:'BOS · BATERÍA RESIDENCIAL', type:'single',
+    text:'¿Instaláis ATS en las instalaciones con inversor All In One con Backup?',
+    sub:'Selecciona 1 opción',
+    opts:['Sí','No']
+  },
+  {
+    id:'b4', tag:'BOS · BATERÍA RESIDENCIAL', type:'single',
+    text:'Respecto a la tensión superior a 253V, ¿cómo solventáis el problema?',
+    sub:'Selecciona 1 opción',
+    opts:['Nunca he tenido problemas de tensión alta','Subir la tensión en el inversor','Regulador de tensión','No hago nada']
+  },
+  {
+    id:'b5', tag:'BOS · BATERÍA RESIDENCIAL', type:'single',
+    text:'¿Preferís utilizar Inline Meter o Meter con toroidal externo?',
+    sub:'Selecciona 1 opción',
+    opts:['Inline Meter','Meter + Pinza','Me da igual','No sé']
+  },
+  {
+    id:'b6', tag:'BOS · BATERÍA RESIDENCIAL', type:'single',
+    text:'¿Qué potencia de inversor es la que más instalas en monofásico?',
+    sub:'Selecciona 1 opción',
+    opts:['4-5kW','6kW','8kW','10kW']
+  },
+  {
+    id:'b7', tag:'BOS · BATERÍA RESIDENCIAL', type:'single',
+    text:'¿Qué potencia de inversor es la que más instalas en trifásico?',
+    sub:'Selecciona 1 opción',
+    opts:['6kW','8kW','10kW','12kW']
+  },
+  {
+    id:'b8', tag:'BOS · BATERÍA RESIDENCIAL', type:'single',
+    text:'¿El cliente pagaría una ampliación de garantía de 5 años?',
+    sub:'Selecciona 1 opción',
+    opts:['Sí, 500€','Sí, 300€','No, tenemos que añadirlo gratuitamente para diferenciarnos','No, 10 años son bastante']
+  },
+  {
+    id:'b9', tag:'BOS · BATERÍA RESIDENCIAL', type:'multi', max:7, hasOtherText:true,
+    text:'¿Los optimizadores/MLPE son una necesidad en vuestras instalaciones residenciales?',
+    sub:'Selecciona todas las que apliquen',
+    opts:[
+      'Sí, necesito MPPT en cada módulo (o pareja) para optimizar el rendimiento',
+      'Sí, necesito una monitorización por cada módulo',
+      'Sí, necesito más seguridad contra incendios',
+      'Sí, necesito gestionar las sombras',
+      'No, el coste es superior a la ventaja',
+      'No, me preocupa la fiabilidad de productos electrónicos que se quedan en el tejado',
+      'Otros'
+    ]
+  },
+  {
+    id:'b10', tag:'BOS · BATERÍA RESIDENCIAL', type:'ranking',
+    text:'¿Cuáles son las 5 características más importantes para baterías residenciales?',
+    sub:'Ordena de más a menos importante',
+    items:['Garantía','Peso','Estética','Precio','Funcionalidades']
+  },
+  // BATERÍA INDUSTRIAL
+  {
+    id:'b11', tag:'BOS · BATERÍA INDUSTRIAL', type:'single',
+    text:'¿Cuál es el porcentaje de ofertas industriales que hacéis con baterías?',
+    sub:'Selecciona 1 opción',
+    opts:['100%','75%','50%','25% o menos','Solo inversor','No hago industrial']
+  },
+  {
+    id:'b12', tag:'BOS · BATERÍA INDUSTRIAL', type:'multi', max:2,
+    text:'¿Cuál es el escenario más típico que habéis encontrado en instalaciones de baterías industriales, o el que creéis que vais a encontrar más en el futuro?',
+    sub:'Selecciona hasta 2 opciones',
+    opts:['Grid Tied Arbitrage','Grid Tied Peak Shaving','Grid Tied Autoconsumo','Grid Tied Servicios de red','Off-Grid','Microred']
+  },
+  {
+    id:'b13', tag:'BOS · BATERÍA INDUSTRIAL', type:'ranking', hasOtherText:true,
+    text:'¿Cuál es el factor más relevante en una instalación de batería industrial, después del precio?',
+    sub:'Ordena de más a menos importante',
+    items:['Soporte pre y post venta','Ser compatible con escenarios múltiples (DC, AC, Hybrid, Offgrid)','Estar conectada con OMIE para los forecast de precio','Inversor grid forming','VPP','Inyección zero','Otros']
+  },
+  {
+    id:'b14', tag:'BOS · BATERÍA INDUSTRIAL', type:'ranking',
+    text:'¿Cuáles son las 5 características más importantes para baterías industriales?',
+    sub:'Ordena de más a menos importante',
+    items:['Garantía','Peso','Estética','Precio','Funcionalidades']
+  },
+  // AEROTERMIA
+  {
+    id:'b15', tag:'BOS · AEROTERMIA', type:'single',
+    text:'¿Tu empresa vende e instala productos de climatización?',
+    sub:'Selecciona 1 opción',
+    opts:[
+      'Sí, vendemos e instalamos todo tipo de productos HVAC',
+      'Sí, pero solo vendemos e instalamos sistemas de aerotermia',
+      'Sí, vendemos estos productos, pero no los instalamos nosotros (subcontratamos la instalación)',
+      'No, pero estamos interesados en incluir estos productos en nuestra oferta en el futuro',
+      'No, no estamos interesados en HVAC'
+    ]
+  },
+  {
+    id:'b16', tag:'BOS · AEROTERMIA', type:'ranking',
+    text:'¿Cuál es el factor más relevante en una instalación de aerotermia?',
+    sub:'Ordena de más a menos importante',
+    items:['Precio','Marca','Garantía','Asistencia / Soporte','Eficiencia']
+  },
+  // EV CHARGERS
+  {
+    id:'b17', tag:'BOS · CARGADORES EV', type:'single',
+    text:'¿Tu empresa vende e instala cargadores para coches eléctricos?',
+    sub:'Selecciona 1 opción',
+    opts:['Sí','No, pero estamos pensando en introducirlo en nuestra oferta','No, no estamos interesados']
+  },
+  {
+    id:'b18', tag:'BOS · CARGADORES EV', type:'single',
+    text:'¿Crees que se instala más la marca de los fabricantes de coches o otras marcas?',
+    sub:'Selecciona 1 opción',
+    opts:['Marca coche','Marca inversor','Otra marca']
+  },
+  {
+    id:'b19', tag:'BOS · CARGADORES EV', type:'ranking', hasOtherText:true,
+    text:'¿Cuál es el factor más relevante en una instalación de cargador EV?',
+    sub:'Ordena de más a menos importante',
+    items:['Precio','Marca','Facilidad de instalación','Autoconsumo solar','Carga dinámica','Multi Vehicle Power Sharing','V2H','V2G','Otros']
+  }
+];
+
+// === DEFINICIÓN DE BLOQUES ===
+const SECTIONS = {
+  'BOS · BATERÍA RESIDENCIAL': {
+    icon:'🏠🔋', title:'Batería Residencial',
+    desc:'Estas preguntas son sobre cómo configuráis vuestras instalaciones residenciales con baterías: backup, ATS, tensión, medidores y garantías.',
+    count: Qs.filter(q=>q.tag==='BOS · BATERÍA RESIDENCIAL').length
+  },
+  'BOS · BATERÍA INDUSTRIAL': {
+    icon:'🏭🔋', title:'Batería Industrial',
+    desc:'Cambiamos de contexto: ahora preguntamos sobre proyectos industriales con baterías, escenarios de uso y factores clave de decisión.',
+    count: Qs.filter(q=>q.tag==='BOS · BATERÍA INDUSTRIAL').length
+  },
+  'BOS · AEROTERMIA': {
+    icon:'🌡️', title:'Aerotermia',
+    desc:'Ahora hablamos de climatización y sistemas aerotérmicos: si los vendéis, instaláis y qué priorizáis en estas soluciones.',
+    count: Qs.filter(q=>q.tag==='BOS · AEROTERMIA').length
+  },
+  'BOS · CARGADORES EV': {
+    icon:'🔌🚗', title:'Cargadores EV',
+    desc:'Por último, queremos saber sobre cargadores de coches eléctricos: si los ofrecéis, qué marcas preferís y qué priorizáis al instalarlos.',
+    count: Qs.filter(q=>q.tag==='BOS · CARGADORES EV').length
+  }
+};
+
+function isFirstOfSection(i){
+  if(i===0) return true;
+  return Qs[i].tag !== Qs[i-1].tag;
+}
+
+let pendingIndex = null;
+
+function maybeShowDivider(i){
+  const sec = SECTIONS[Qs[i].tag];
+  if(!sec) return false;
+  pendingIndex = i;
+  document.getElementById('dividerIcon').textContent = sec.icon;
+  document.getElementById('dividerTag').textContent = 'Nuevo bloque';
+  document.getElementById('dividerTitle').textContent = sec.title;
+  document.getElementById('dividerDesc').textContent = sec.desc;
+  document.getElementById('dividerCount').textContent = sec.count + ' preguntas en este bloque';
+  show('s-divider');
+  return true;
+}
+
+function continueFromDivider(){
+  if(pendingIndex!==null){
+    document.getElementById('navBar').style.display='flex';
+    show('s-q');
+    renderQ(pendingIndex);
+    pendingIndex=null;
+  }
+}
+
+let cur=0;
+const ans={};
+const rankState={};
+let dragSrc=null;
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+
+function updateProgress(){
+  document.getElementById('progFill').style.width=(cur/Qs.length*100)+'%';
+  document.getElementById('stepBadge').textContent=cur+' / '+Qs.length;
+}
+
+function startSurvey(){
+  const empresa=document.getElementById('inpEmpresa').value.trim();
+  const errEl=document.getElementById('empresa-error');
+  if(!empresa){errEl.style.display='block';return;}
+  errEl.style.display='none';
+  document.getElementById('navBar').style.display='none';
+  if(maybeShowDivider(0)) return;
+  document.getElementById('navBar').style.display='flex';
+  show('s-q');renderQ(0);
+}
+
+function hasAnswer(q){
+  if(q.type==='ranking') return true;
+  const a = ans[q.id];
+  if(a===undefined||a===null) return false;
+  if(Array.isArray(a)) return a.length>0;
+  if(typeof a==='string') return a.trim()!=='';
+  return true;
+}
+
+function renderQ(i){
+  cur=i;
+  const q=Qs[i];
+  document.getElementById('qTag').textContent=q.tag;
+  document.getElementById('qNum').textContent='Pregunta '+(i+1)+' de '+Qs.length;
+  document.getElementById('qText').textContent=q.text;
+  document.getElementById('qSub').textContent=q.sub||'';
+  document.getElementById('btnBack').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('btnNext').textContent=i===Qs.length-1?'ENVIAR ✓':'SIGUIENTE →';
+  const isOptional = q.type==='open';
+  document.getElementById('btnNext').disabled = isOptional ? false : !hasAnswer(q);
+  updateProgress();
+  const body=document.getElementById('qBody');
+  body.innerHTML='';
+  if(q.type==='single') renderSingle(body,q);
+  else if(q.type==='multi') renderMulti(body,q);
+  else if(q.type==='ranking') renderRanking(body,q);
+  else if(q.type==='open') renderOpen(body,q);
+}
+
+function renderSingle(body,q){
+  const wrap=document.createElement('div');wrap.className='opts';
+  q.opts.forEach(o=>{
+    const item=document.createElement('div');
+    item.className='opt'+(ans[q.id]===o?' sel':'');
+    item.innerHTML=`<div class="opt-check">${ans[q.id]===o?'✓':''}</div><div class="opt-lbl">${o}</div>`;
+    item.onclick=()=>{ans[q.id]=o;renderQ(cur);};
+    wrap.appendChild(item);
+  });
+  body.appendChild(wrap);
+}
+
+function renderMulti(body,q){
+  const lim=document.createElement('div');lim.className='multi-lim';lim.textContent=q.sub;body.appendChild(lim);
+  const wrap=document.createElement('div');wrap.className='opts';
+  const sel=ans[q.id]||[];
+  q.opts.forEach(o=>{
+    const item=document.createElement('div');
+    item.className='opt'+(sel.includes(o)?' sel':'');
+    item.innerHTML=`<div class="opt-check-sq">${sel.includes(o)?'✓':''}</div><div class="opt-lbl">${o}</div>`;
+    item.onclick=()=>{
+      let c=ans[q.id]||[];
+      c=c.includes(o)?c.filter(x=>x!==o):(c.length<(q.max||99)?[...c,o]:c);
+      ans[q.id]=c;renderQ(cur);
+    };
+    wrap.appendChild(item);
+  });
+  body.appendChild(wrap);
+  if(q.hasOtherText && sel.includes('Otros')){
+    const ow=document.createElement('div');ow.className='other-input';
+    const inp=document.createElement('input');
+    inp.type='text';inp.placeholder='¿Cuál?';
+    inp.value=ans[q.id+'_other']||'';
+    inp.oninput=()=>{ans[q.id+'_other']=inp.value;};
+    ow.appendChild(inp);body.appendChild(ow);
+  }
+}
+
+function renderRanking(body,q){
+  if(!rankState[q.id]) rankState[q.id]=[...q.items];
+  const hint=document.createElement('div');hint.className='rank-hint';hint.textContent='↕ Arrastra o usa las flechas para ordenar';body.appendChild(hint);
+  const list=document.createElement('div');list.className='rank-list';
+  rankState[q.id].forEach((item,i)=>{
+    const row=document.createElement('div');
+    row.className='rank-item';row.draggable=true;
+    row.innerHTML=`<div class="rank-pos ${i===0?'p1':''}">${i+1}</div><div class="rank-txt">${item}</div><div class="rank-arrows"><button class="rank-arr" data-i="${i}" data-d="-1">▲</button><button class="rank-arr" data-i="${i}" data-d="1">▼</button></div>`;
+    row.querySelectorAll('.rank-arr').forEach(btn=>{
+      btn.onclick=e=>{
+        e.stopPropagation();
+        const a=+btn.dataset.i,d=+btn.dataset.d,b=a+d;
+        if(b<0||b>=rankState[q.id].length) return;
+        [rankState[q.id][a],rankState[q.id][b]]=[rankState[q.id][b],rankState[q.id][a]];
+        ans[q.id]=[...rankState[q.id]];renderQ(cur);
+      };
+    });
+    row.addEventListener('dragstart',()=>{dragSrc=i;row.classList.add('dragging')});
+    row.addEventListener('dragend',()=>row.classList.remove('dragging'));
+    row.addEventListener('dragover',e=>{e.preventDefault();row.classList.add('drag-over')});
+    row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
+    row.addEventListener('drop',e=>{
+      e.preventDefault();row.classList.remove('drag-over');
+      if(dragSrc===null||dragSrc===i) return;
+      const arr=rankState[q.id];const[m]=arr.splice(dragSrc,1);arr.splice(i,0,m);
+      ans[q.id]=[...arr];renderQ(cur);
+    });
+    let ty=0;
+    row.addEventListener('touchstart',e=>{ty=e.touches[0].clientY;dragSrc=i},{passive:true});
+    row.addEventListener('touchend',e=>{
+      const dy=e.changedTouches[0].clientY-ty;
+      if(Math.abs(dy)>30){const d=dy>0?1:-1,j=i+d;
+        if(j>=0&&j<rankState[q.id].length){[rankState[q.id][i],rankState[q.id][j]]=[rankState[q.id][j],rankState[q.id][i]];ans[q.id]=[...rankState[q.id]];renderQ(cur);}
+      }
+    },{passive:true});
+    list.appendChild(row);
+  });
+  ans[q.id]=ans[q.id]||[...rankState[q.id]];
+  body.appendChild(list);
+  if(q.hasOtherText && (ans[q.id]||[]).includes('Otros')){
+    const ow=document.createElement('div');ow.className='other-input';
+    const inp=document.createElement('input');
+    inp.type='text';inp.placeholder='¿Cuál?';
+    inp.value=ans[q.id+'_other']||'';
+    inp.oninput=()=>{ans[q.id+'_other']=inp.value;};
+    ow.appendChild(inp);body.appendChild(ow);
+  }
+}
+
+function renderOpen(body,q){
+  const wrap=document.createElement('div');wrap.className='open-wrap';
+  const ta=document.createElement('textarea');
+  ta.placeholder=q.placeholder||'Escribe aquí...';ta.value=ans[q.id]||'';
+  const cc=document.createElement('div');cc.className='char-count';cc.textContent=ta.value.length+' caracteres';
+  ta.oninput=()=>{ans[q.id]=ta.value;cc.textContent=ta.value.length+' caracteres'};
+  wrap.appendChild(ta);wrap.appendChild(cc);body.appendChild(wrap);
+}
+
+function nextQ(){
+  const q = Qs[cur];
+  const isOptional = q.type==='open';
+  if(!isOptional && !hasAnswer(q)) return;
+  if(cur<Qs.length-1){
+    const nextIdx = cur+1;
+    if(isFirstOfSection(nextIdx)){
+      document.getElementById('navBar').style.display='none';
+      maybeShowDivider(nextIdx);
+    } else {
+      renderQ(nextIdx);
+    }
+  } else {
+    finishSurvey();
+  }
+}
+function prevQ(){if(cur>0) renderQ(cur-1)}
+function skipQ(){
+  if(cur<Qs.length-1){
+    const nextIdx = cur+1;
+    if(isFirstOfSection(nextIdx)){
+      document.getElementById('navBar').style.display='none';
+      maybeShowDivider(nextIdx);
+    } else {
+      renderQ(nextIdx);
+    }
+  } else {
+    finishSurvey();
+  }
+}
+
+async function finishSurvey(){
+  document.getElementById('progFill').style.width='100%';
+  document.getElementById('stepBadge').textContent=Qs.length+' / '+Qs.length;
+  document.getElementById('navBar').style.display='none';
+  show('s-ty');
+  await saveResponse();
+}
+
+async function saveResponse(){
+  try{
+    const getRes=await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`,{
+      headers:{'X-Master-Key':JSONBIN_KEY}
+    });
+    const getData=await getRes.json();
+    const existing=getData.record?.responses||[];
+    const newEntry={
+      session_id:SESSION_ID,
+      timestamp:new Date().toISOString(),
+      empresa:document.getElementById('inpEmpresa').value||null,
+      nombre:document.getElementById('inpNombre').value||null,
+      responses:Qs.map(q=>({
+        id:q.id,
+        tag:q.tag,
+        question:q.text,
+        type:q.type,
+        answer:ans[q.id]??null,
+        other_text: q.hasOtherText ? (ans[q.id+'_other']||null) : undefined
+      }))
+    };
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY},
+      body:JSON.stringify({responses:[...existing,newEntry]})
+    });
+  }catch(e){console.log('Save failed:',e)}
+}
+
+function resetSurvey(){
+  Object.keys(ans).forEach(k=>delete ans[k]);
+  Object.keys(rankState).forEach(k=>delete rankState[k]);
+  document.getElementById('inpEmpresa').value='';
+  document.getElementById('inpNombre').value='';
+  document.getElementById('navBar').style.display='none';
+  document.getElementById('progFill').style.width='0%';
+  document.getElementById('stepBadge').textContent='Partner Day';
+  cur=0;
+  show('s-intro');
+}
+</script>
+</body>
+</html>
